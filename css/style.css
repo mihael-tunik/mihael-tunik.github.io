@@ -135,9 +135,12 @@ nav.navigation {
   padding: 20px 20px 0;
   background: #fff;
   background: rgba(255, 255, 255, 0.9);
+  background-color: #b3c7e0;
+  
   margin: 0 auto;
   text-align: right;
   z-index: 100;
+  padding: 5px 5px;
 }
 
 nav.navigation a {
@@ -245,13 +248,14 @@ nav.navigation a.button {
 .main {
   width: 100%;
   margin: 0 auto;
+  background-color: #ffffff;
+  padding: 15px 20px;
 }
 
 /* profile  */
 
 .profile {
-  margin: 60px auto 0 auto;
-  text-align: center;
+  margin: 10px 20px 20px 25px;
 }
 
 .profile .avatar {
@@ -279,20 +283,24 @@ nav.navigation a.button {
 
 /* index post list */
 #list-page {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 24px;
 }
 
 #list-page .item {
   margin: 12px 0;
+  background-color: #b3c7e0;
+  padding: 8px 24px;
+  border-radius: 15px 15px;
+  align: center
 }
 
 #list-page .title {
   display: inline-block;
   color: #404040;
   font-size: 20px;
-  font-weight: 400;
+  font-weight: 600;
   margin: 0;
   width: 80%;
 }
@@ -316,7 +324,7 @@ nav.navigation a.button {
 }
 
 #list-page .summary {
-  color: #757575;
+  color: #5a5a5f;
   margin-top: 12px;
   word-break: normal;
   overflow-wrap: anywhere;

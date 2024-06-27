@@ -5,13 +5,12 @@
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">    
 <meta name="viewport" content="width=device-width,minimum-scale=1">
-<meta name="description" content="Everybody knows about marching squares and cubes.
+<meta name="description" content="Everybody knows about marching squares or cubes.
 These methods are typically used for contour line/surface computation.
+This problem is actually a particular case of more general zero set problem.
+In marching squares function f acts from R^2 -&gt; R and zero set problem consists of one equation.
 Algorithm is fairly trivial in its nature: if there&rsquo;s a function sign change on the grid edge then we have a contour inside.
-This problem is actually a case of more general zero set problem.
-In previously mentioned cases function f acts from R^2 -&gt; R and zero set problem consists of one equation.
-But what if f is vector-function and acts, for example, from R^3 -&gt; R^2?
-Surprisingly, there&rsquo;s nice family of algorithms to handle this, called labeling methods.">
+Can we generalize this approach?">
 <meta name="generator" content="Hugo 0.128.0">
   <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
 <link rel="stylesheet" href="/css/style.css">
@@ -33,7 +32,7 @@ Surprisingly, there&rsquo;s nice family of algorithms to handle this, called lab
           ·
         </span>
         <span>
-          1105 words
+          1199 words
         </span>
         <span class="split">
           ·
@@ -43,21 +42,23 @@ Surprisingly, there&rsquo;s nice family of algorithms to handle this, called lab
         </span>
     </div>
     <div class="content">
-      <p>Everybody knows about marching squares and cubes.
+      <p>Everybody knows about marching squares or cubes.
 These methods are typically used for contour line/surface computation.
+This problem is actually a particular case of more general <strong>zero set problem</strong>.
+In marching squares function f acts from R^2 -&gt; R and zero set problem consists of one equation.
 Algorithm is fairly trivial in its nature: <em>if there&rsquo;s a function sign change on the grid edge then we have a contour inside</em>.
-<p class="markdown-image">
-  <img src="/images/ms_21.svg" alt="MS"  />
-</p>
-This problem is actually a case of more general <strong>zero set problem</strong>.
-In previously mentioned cases function f acts from R^2 -&gt; R and zero set problem consists of one equation.
-But what if f is <em>vector-function</em> and acts, for example, from R^3 -&gt; R^2?
+Can we generalize this approach?</p>
+<p>What if f is a <em>vector-function</em> and acts, for example, from R^3 -&gt; R^2?
 Surprisingly, there&rsquo;s nice family of algorithms to handle this, called <em>labeling</em> methods.</p>
-<p>So it&rsquo;s labeling algorithm and that means that we have grid/space subdivision and for every vertice of it
+<h2 id="zero-set-problem">Zero set problem <a href="#zero-set-problem" class="anchor">🔗</a></h2><p>For vector-valued function f : R^n -&gt; R^m find x values
+f([x1, &hellip;, xn]) = [0, &hellip;, 0].</p>
+<h2 id="labeling-methods">Labeling methods <a href="#labeling-methods" class="anchor">🔗</a></h2><p>Let&rsquo;s return to the labeling. So it&rsquo;s <em>labeling algorithms</em> and that means that we have grid/space subdivision and for every vertice of it
 we&rsquo;ll compute some <em>label values</em>. Then according to them we can find what grid elements/cells present the zero set of our function.
 Important thing to say is that function f here is approximated by piecewise linear version of itself f_PL, which is easy to define:
 values on vertices will be the same and linearly interpolated inside the cell.
-For brevity let&rsquo;s call R^n -&gt; R^m zero set problems by tuple (n, m). There&rsquo;s at least two of labeling strategies known:
+<p class="markdown-image">
+  <img src="/images/f_pl_21.svg" alt="MS"  />
+</p> For brevity let&rsquo;s call R^n -&gt; R^m zero set problems by tuple (n, m). There&rsquo;s at least two of labeling strategies known:
 <strong>integer</strong> and <strong>vector labeling</strong>. We focus on the integer labeling, because it&rsquo;s less obvious and more elegant.</p>
 <p>First, suppose we have simplicial space subdivision. Then, for example,
 according to Introduction to <em>Numerical Continuation Methods</em> by Eugene L. Allgower and Kurt Georg
@@ -66,7 +67,7 @@ Simplex is called <em>completely labeled</em> if set of its vertices contains ev
 Every simplicial subdivision under certain conditions on labeling contain such simplex and this fact is connected with Sperner&rsquo;s Lemma.</p>
 <p>Then it can be proved, that in subdivision <strong>completely labeled simplices and only them contain solutions of f_PL(x) = 0</strong>.</p>
 <p>But why do we need exactly complete labeling in multidimensional case?
-Let&rsquo;s illustrate this by hand-waving explanation.
+Let&rsquo;s gain some intuition by hand-waving explanation.
 On the following picture, there&rsquo;s one example of completely labeled simplex for (3,2)-problem.
 <p class="markdown-image">
   <img src="/images/completely_labeled_32.svg" alt="Example_32"  />
@@ -74,8 +75,11 @@ On the following picture, there&rsquo;s one example of completely labeled simple
 It has four vertices f1, f2, f3, f4 and labelings corresponding to underlying vector-function component signs ({+, -} means f[0] &gt; 0, f[1] &lt; 0).
 Then it&rsquo;s easy to see that there exists a point (0, -) between f1 and f2 and (0, +) between f3 and f4 by linearity of f_PL approximation.
 So we have one zero point u of f_PL on the line between them.
-Following the same logic another zero point v can be found. Solution of (3, 2)-problem for linear function f_PL should be a line between u and v.</p>
-<p>Three years ago in my <a href="https://github.com/mihael-tunik/PLClib" target="_blank" rel="noopener">project</a> I implemented <em>integer labeling</em>.
+Following the same logic another zero point v can be found. Solution of (3, 2)-problem for linear function f_PL should be a line between u and v.
+On this example it&rsquo;s become obvious why it&rsquo;s not enough to use sign change condition (like in marching squares).
+For example, {{+, -}, {-, +}}-edge with different signs for f coordinates will indeed contain zeros of f_PL in every component,
+but they will be achieved <strong>not</strong> simultaneously. Completeness of labeling is more forcing condition.</p>
+<h2 id="code">Code <a href="#code" class="anchor">🔗</a></h2><p>Three years ago in my <a href="https://github.com/mihael-tunik/PLClib" target="_blank" rel="noopener">project</a> I implemented <em>integer labeling</em>.
 More precisely, simplified version (3,2)-algorithm for rough estimation of zero sets.</p>
 <p>Let&rsquo;s see what is going on in this code and where magic happens.
 Here&rsquo;s full version (without extra prints) ~120 lines of code:</p>
@@ -207,7 +211,7 @@ Here&rsquo;s a little trick: let&rsquo;s call cube <em>completely labeled</em> i
 If we find such cube we can return necessary simplex, compute line segment where or
 &hellip; just return corner coordinates which were enough for my purposes back then.
 Because for small enough grids completely labeled cubes also can be used as rough, &ldquo;voxel&rdquo; approximation to zero set.</p>
-<p>Labeling data of cube layer stored in <em>cache_prev</em>, <em>cache_next</em> variables.
+<h2 id="details">Details <a href="#details" class="anchor">🔗</a></h2><p>Labeling data of cube layer stored in <em>cache_prev</em>, <em>cache_next</em> variables.
 On every iteration we load two consecutive function data slices.
 Cube labeling set is encoded by bits in  <em>label_flags</em> variable.</p>
 <p>Basically, here we sum up some integer values for every cube of our grid in some speed-optimized manner.</p>
@@ -220,8 +224,9 @@ Cube labeling set is encoded by bits in  <em>label_flags</em> variable.</p>
 </code></pre><p>Array <em>int map[] = {1, 1, 2, 4}</em> is a <em>map</em> between function sign combinations and bit flag values
 {11 -&gt; 100, 10 -&gt; 010, 01 -&gt; 001, 00 -&gt; 001}. Macros <em>COMPLETELY_LABELED(&hellip;)</em> is defined simply as three 1&rsquo;s binary number</p>
 <pre tabindex="0"><code>#define COMPLETELY_LABELED(x) ((x) == 0x7)
-</code></pre><p>and that&rsquo;s it. Full version of the code you can find <a href="https://github.com/mihael-tunik/PLClib/blob/master/lib_src/PLC_lib_vec.cpp" target="_blank" rel="noopener">here</a>.
-<a href="https://github.com/mihael-tunik/PLClib" target="_blank" rel="noopener">Repository</a> contains corresponding python package (warning: it&rsquo;s early beta version) and where you can find examples and try it by your own.</p>
+</code></pre><p>and that&rsquo;s it.</p>
+<h2 id="instead-of-conclusion">Instead of conclusion <a href="#instead-of-conclusion" class="anchor">🔗</a></h2><p>Full version of the code you can find <a href="https://github.com/mihael-tunik/PLClib/blob/master/lib_src/PLC_lib_vec.cpp" target="_blank" rel="noopener">here</a>.</p>
+<p><a href="https://github.com/mihael-tunik/PLClib" target="_blank" rel="noopener">Repository</a> contains corresponding python package (warning: this version is not well-tested) and where you can find examples and try it by your own.</p>
     </div>
         <div class="tags">
                 <a href="http://mihael-tunik.github.io/tags/algorithms">algorithms</a>

@@ -8,7 +8,7 @@
 <meta name="description" content="Everybody knows about marching squares or cubes.
 These methods are typically used for contour line/surface computation.
 This problem is actually a particular case of more general zero set problem.
-In marching squares function f acts from R2 -&gt; R and zero set problem consists of one equation.
+In marching squares function f acts from R2 → R and zero set problem consists of one equation.
 Algorithm is fairly trivial in its nature: if there&rsquo;s a function sign change on the grid edge then we have a contour inside.
 Can we generalize this approach?">
 <meta name="generator" content="Hugo 0.128.0">
@@ -32,7 +32,7 @@ Can we generalize this approach?">
           ·
         </span>
         <span>
-          1197 words
+          1243 words
         </span>
         <span class="split">
           ·
@@ -62,12 +62,12 @@ Can we generalize this approach?">
       <p>Everybody knows about marching squares or cubes.
 These methods are typically used for contour line/surface computation.
 This problem is actually a particular case of more general <strong>zero set problem</strong>.
-In marching squares function f acts from R<sup>2</sup> -&gt; R and zero set problem consists of one equation.
+In marching squares function f acts from R<sup>2</sup> → R and zero set problem consists of one equation.
 Algorithm is fairly trivial in its nature: <em>if there&rsquo;s a function sign change on the grid edge then we have a contour inside</em>.
 Can we generalize this approach?</p>
-<p>What if f is a <em>vector-function</em> and acts, for example, R<sup>3</sup> -&gt; R<sup>2</sup>?
+<p>What if f is a <em>vector-function</em> and acts, for example, R<sup>3</sup> → R<sup>2</sup>?
 Surprisingly, there&rsquo;s nice family of algorithms to handle this, called <em>labeling</em> methods.</p>
-<h2 id="zero-set-problem">Zero set problem <a href="#zero-set-problem" class="anchor">🔗</a></h2><p>For vector-valued function f: R<sup>n</sup> -&gt; R<sup>m</sup> find x values
+<h2 id="zero-set-problem">Zero set problem <a href="#zero-set-problem" class="anchor">🔗</a></h2><p>For vector-valued function f: R<sup>n</sup> → R<sup>m</sup> find x values
 f(x<sub>1</sub>, &hellip;, x<sub>n</sub>) = (0, &hellip;, 0).</p>
 <h2 id="labeling-methods">Labeling methods <a href="#labeling-methods" class="anchor">🔗</a></h2><p>Let&rsquo;s return to the labeling. So it&rsquo;s <em>labeling algorithms</em> and that means that we have grid/space subdivision and for every vertice of it
 we&rsquo;ll compute some <em>label values</em>. Then according to them we can find what grid elements/cells present the zero set of our function.
@@ -75,7 +75,7 @@ Important thing to say is that function f here is approximated by piecewise line
 values on vertices will be the same and linearly interpolated inside the cell.
 <p class="markdown-image">
   <img src="/images/f_pl_21.svg" alt="MS"  />
-</p> For brevity let&rsquo;s call R<sup>n</sup> -&gt; R<sup>m</sup> zero set problems by tuple (n, m). There&rsquo;s at least two of labeling strategies known:
+</p> For brevity let&rsquo;s call R<sup>n</sup> → R<sup>m</sup> zero set problems by tuple (n, m). There&rsquo;s at least two of labeling strategies known:
 <strong>integer</strong> and <strong>vector labeling</strong>. We focus on the integer labeling, because it&rsquo;s less obvious and more elegant.</p>
 <p>First, suppose we have simplicial space subdivision. Then, for example,
 according to Introduction to <em>Numerical Continuation Methods</em> by Eugene L. Allgower and Kurt Georg
@@ -93,7 +93,7 @@ It has four vertices f1, f2, f3, f4 and labelings corresponding to underlying ve
 Then it&rsquo;s easy to see that there exists a point (0, -) between f1 and f2 and (0, +) between f3 and f4 by linearity of f<sub>PL</sub> approximation.
 So we have one zero point u of f_PL on the line between them.
 Following the same logic another zero point v can be found. Solution of (3, 2)-problem for linear function f<sub>PL</sub> should be a line between u and v.
-On this example it&rsquo;s become obvious why it&rsquo;s not enough to use sign change condition (like in marching squares).
+On this example it&rsquo;s getting obvious why it&rsquo;s not enough to use sign change condition (like in marching squares).
 For example, {{+, -}, {-, +}}-edge with different signs for f coordinates will indeed contain zeros of f<sub>PL</sub> in every component,
 but they will be achieved <strong>not</strong> simultaneously. Completeness of labeling is more forcing condition.</p>
 <h2 id="code">Code <a href="#code" class="anchor">🔗</a></h2><p>Three years ago in my <a href="https://github.com/mihael-tunik/PLClib" target="_blank" rel="noopener">project</a> I implemented <em>integer labeling</em>.
@@ -239,10 +239,38 @@ Cube labeling set is encoded by bits in  <em>label_flags</em> variable.</p>
       /* cube is found */
    }
 </code></pre><p>Array <em>int map[] = {1, 1, 2, 4}</em> is a <em>map</em> between function sign combinations and bit flag values
-{11 -&gt; 100, 10 -&gt; 010, 01 -&gt; 001, 00 -&gt; 001}. Macros <em>COMPLETELY_LABELED(&hellip;)</em> is defined simply as three 1&rsquo;s binary number</p>
+{11 → 100, 10 → 010, 01 → 001, 00 → 001}. Macros <em>COMPLETELY_LABELED(&hellip;)</em> is defined simply as three 1&rsquo;s binary number</p>
 <pre tabindex="0"><code>#define COMPLETELY_LABELED(x) ((x) == 0x7)
 </code></pre><p>and that&rsquo;s it.</p>
-<h2 id="instead-of-conclusion">Instead of conclusion <a href="#instead-of-conclusion" class="anchor">🔗</a></h2><p>Full version of the code you can find <a href="https://github.com/mihael-tunik/PLClib/blob/master/lib_src/PLC_lib_vec.cpp" target="_blank" rel="noopener">here</a>.</p>
+<h2 id="instead-of-conclusion">Instead of conclusion <a href="#instead-of-conclusion" class="anchor">🔗</a></h2><p>Now we have extended picture of algorithms for zero set computation.
+Moreover, one can view marching algorithms as simplified versions of general simlex labeling.</p>
+<table>
+<thead>
+<tr>
+<th>Signature</th>
+<th>Method</th>
+<th>Manifold type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R<sup>2</sup> →  R</td>
+<td>Marching squares</td>
+<td>Curve</td>
+</tr>
+<tr>
+<td>R<sup>3</sup> → R</td>
+<td>Marching cubes</td>
+<td>Surface</td>
+</tr>
+<tr>
+<td>R<sup>n+d</sup> → R<sup>n</sup></td>
+<td><strong>Simplex labeling</strong></td>
+<td>d-Manifold</td>
+</tr>
+</tbody>
+</table>
+<p>Full version of the code you can find <a href="https://github.com/mihael-tunik/PLClib/blob/master/lib_src/PLC_lib_vec.cpp" target="_blank" rel="noopener">here</a>.</p>
 <p><a href="https://github.com/mihael-tunik/PLClib" target="_blank" rel="noopener">Repository</a> contains corresponding python package (warning: this version is not well-tested) and where you can find examples and try it by your own.</p>
     </div>
         <div class="tags">

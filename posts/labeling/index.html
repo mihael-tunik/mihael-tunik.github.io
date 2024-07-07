@@ -11,7 +11,7 @@ This problem is actually a particular case of more general zero set problem.
 In marching squares function f acts from R2 → R and zero set problem consists of one equation.
 Algorithm is fairly trivial in its nature: if there&rsquo;s a function sign change on the grid edge then we have a contour inside.
 Can we generalize this approach?">
-<meta name="generator" content="Hugo 0.128.0">
+<meta name="generator" content="Hugo 0.128.2">
   <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
 <link rel="stylesheet" href="/css/style.css">
 <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
@@ -32,13 +32,13 @@ Can we generalize this approach?">
           ·
         </span>
         <span>
-          1243 words
+          1412 words
         </span>
         <span class="split">
           ·
         </span>
         <span>
-          6 minute read
+          7 minute read
         </span>
     </div>
     <aside class="toc">
@@ -67,24 +67,30 @@ Algorithm is fairly trivial in its nature: <em>if there&rsquo;s a function sign 
 Can we generalize this approach?</p>
 <p>What if f is a <em>vector-function</em> and acts, for example, R<sup>3</sup> → R<sup>2</sup>?
 Surprisingly, there&rsquo;s nice family of algorithms to handle this, called <em>labeling</em> methods.</p>
-<h2 id="zero-set-problem">Zero set problem <a href="#zero-set-problem" class="anchor">🔗</a></h2><p>For vector-valued function f: R<sup>n</sup> → R<sup>m</sup> find x values
-f(x<sub>1</sub>, &hellip;, x<sub>n</sub>) = (0, &hellip;, 0).</p>
-<h2 id="labeling-methods">Labeling methods <a href="#labeling-methods" class="anchor">🔗</a></h2><p>Let&rsquo;s return to the labeling. So it&rsquo;s <em>labeling algorithms</em> and that means that we have grid/space subdivision and for every vertice of it
+<h2 id="zero-set-problem">Zero set problem <a href="#zero-set-problem" class="anchor">🔗</a></h2><p>First, let&rsquo;s define the problem:</p>
+<blockquote>
+<p>For vector-valued function f: R<sup>n</sup> → R<sup>m</sup> find x values f(x<sub>1</sub>, &hellip;, x<sub>n</sub>) = (0, &hellip;, 0).</p>
+</blockquote>
+<h2 id="labeling-methods">Labeling methods <a href="#labeling-methods" class="anchor">🔗</a></h2><p>Now, let&rsquo;s return to the labeling. So it&rsquo;s <em>labeling algorithms</em> and that means that we have grid/space subdivision and for every vertice of it
 we&rsquo;ll compute some <em>label values</em>. Then according to them we can find what grid elements/cells present the zero set of our function.
 Important thing to say is that function f here is approximated by piecewise linear version of itself f<sub>PL</sub>, which is easy to define:
 values on vertices will be the same and linearly interpolated inside the cell.
 <p class="markdown-image">
   <img src="/images/f_pl_21.svg" alt="MS"  />
-</p> For brevity let&rsquo;s call R<sup>n</sup> → R<sup>m</sup> zero set problems by tuple (n, m). There&rsquo;s at least two of labeling strategies known:
+</p> For brevity let&rsquo;s call R<sup>n</sup> → R<sup>m</sup> zero set problems by the tuple (n, m). There&rsquo;s at least two of labeling strategies known:
 <strong>integer</strong> and <strong>vector labeling</strong>. We focus on the integer labeling, because it&rsquo;s less obvious and more elegant.</p>
-<p>First, suppose we have simplicial space subdivision. Then, for example,
-according to Introduction to <em>Numerical Continuation Methods</em> by Eugene L. Allgower and Kurt Georg
+<p>First, suppose we have simplicial space subdivision. Then, we should define the labeling rule for every vertice.
+For example, according to Introduction to <em>Numerical Continuation Methods</em> by Eugene L. Allgower and Kurt Georg
 appropriate labeling of simplex vertices can be defined as simple as <strong>number of initial coordinates of f which are positive</strong>.
 Simplex is called <em>completely labeled</em> if set of its vertices contains every possible labeling.
-Every simplicial subdivision under certain conditions on labeling contain such simplex and this fact is connected with Sperner&rsquo;s Lemma.</p>
-<p>Then it can be proved, that in subdivision <strong>completely labeled simplices and only them contain solutions of f<sub>PL</sub>(x) = 0</strong>.</p>
-<p>But why do we need exactly complete labeling in multidimensional case?
-Let&rsquo;s gain some intuition by hand-waving explanation.
+Every simplicial subdivision under certain conditions on the labeling contain such simplex and this fact is connected with Sperner&rsquo;s Lemma (somehow).</p>
+<p>Then the following statement is true:</p>
+<blockquote>
+<p>For function f : R<sup>n</sup> → R<sup>m</sup> and simplicial subdivision of R<sup>n</sup> define labeling L<sub>s</sub>(v) as number of positive initial coordinates of f,
+then in subdivision <strong>completely labeled simplices and only them contain non-empty intersection with f<sub>PL</sub>(x) zero set</strong>.</p>
+</blockquote>
+<p>But why do we need exactly complete labeling in multidimensional case? For now, I didn&rsquo;t found corresponding theorem with proof in strict form.</p>
+<p>However we can gain some intuition by hand-waving explanation and examples.
 On the following picture, there&rsquo;s one example of completely labeled simplex for (3,2)-problem.
 <p class="markdown-image">
   <img src="/images/completely_labeled_32.svg" alt="Example_32"  />
@@ -92,10 +98,17 @@ On the following picture, there&rsquo;s one example of completely labeled simple
 It has four vertices f1, f2, f3, f4 and labelings corresponding to underlying vector-function component signs ({+, -} means f<sub>1</sub> &gt; 0, f<sub>2</sub> &lt; 0).
 Then it&rsquo;s easy to see that there exists a point (0, -) between f1 and f2 and (0, +) between f3 and f4 by linearity of f<sub>PL</sub> approximation.
 So we have one zero point u of f_PL on the line between them.
-Following the same logic another zero point v can be found. Solution of (3, 2)-problem for linear function f<sub>PL</sub> should be a line between u and v.
-On this example it&rsquo;s getting obvious why it&rsquo;s not enough to use sign change condition (like in marching squares).
+Following the same logic another zero point v can be found. Solution of (3, 2)-problem for linear function f<sub>PL</sub> should be a line between u and v.</p>
+<p>On this example it&rsquo;s getting obvious why it&rsquo;s not enough to use sign change condition (like in marching squares).
 For example, {{+, -}, {-, +}}-edge with different signs for f coordinates will indeed contain zeros of f<sub>PL</sub> in every component,
-but they will be achieved <strong>not</strong> simultaneously. Completeness of labeling is more forcing condition.</p>
+but they will be achieved <strong>not</strong> simultaneously. So we can see, why <em>completeness of labeling</em> is more forcing and necessary condition.</p>
+<p>Interesting notes:</p>
+<ul>
+<li>For (3,2)-problem zero set approximation is generally a polygonal chain. On every subdivision simplex which is completely labeled
+there&rsquo;s a <em>door in</em> facet where this chain enters the simplex and <em>door out</em> facet, where it leaves it. Can such facets be found with only labelings given?
+Actually, for every (n+1, n)-problem zero set approximation is a polygonal chain in R<sup>n+1</sup>.
+Can the general rule be formulated for <em>door</em> simplices facets?</li>
+</ul>
 <h2 id="code">Code <a href="#code" class="anchor">🔗</a></h2><p>Three years ago in my <a href="https://github.com/mihael-tunik/PLClib" target="_blank" rel="noopener">project</a> I implemented <em>integer labeling</em>.
 More precisely, simplified version (3,2)-algorithm for rough estimation of zero sets.</p>
 <p>Let&rsquo;s see what is going on in this code and where magic happens.
@@ -242,6 +255,8 @@ Cube labeling set is encoded by bits in  <em>label_flags</em> variable.</p>
 {11 → 100, 10 → 010, 01 → 001, 00 → 001}. Macros <em>COMPLETELY_LABELED(&hellip;)</em> is defined simply as three 1&rsquo;s binary number</p>
 <pre tabindex="0"><code>#define COMPLETELY_LABELED(x) ((x) == 0x7)
 </code></pre><p>and that&rsquo;s it.</p>
+<p>Note, that computations for each data slice (and actually for single grid cell) are independent.
+Such code can be easily parallelized with standard frameworks like OMP or even ported on GPU.</p>
 <h2 id="instead-of-conclusion">Instead of conclusion <a href="#instead-of-conclusion" class="anchor">🔗</a></h2><p>Now we have extended picture of algorithms for zero set computation.
 Moreover, one can view marching algorithms as simplified versions of general simlex labeling.</p>
 <table>

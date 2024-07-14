@@ -5,10 +5,10 @@
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">    
 <meta name="viewport" content="width=device-width,minimum-scale=1">
-<meta name="description" content="Find median in two sorted arrays in logarithmic time is quite famous interview question (and a Leetcode problem from hard category).
+<meta name="description" content="Find median of two sorted arrays in logarithmic time is quite famous interview question (and a Leetcode problem from hard category).
 Let&rsquo;s generalize this question and solve it with python code. Just because we can.">
 <meta name="generator" content="Hugo 0.128.2">
-  <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+  
 <link rel="stylesheet" href="/css/style.css">
 <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
   </head>
@@ -28,7 +28,7 @@ Let&rsquo;s generalize this question and solve it with python code. Just because
           ·
         </span>
         <span>
-          390 words
+          398 words
         </span>
         <span class="split">
           ·
@@ -53,7 +53,7 @@ Let&rsquo;s generalize this question and solve it with python code. Just because
       </details>
     </aside>
     <div class="content">
-      <p>Find median in two sorted arrays in logarithmic time is quite famous interview question (and a Leetcode problem from <em>hard</em> category).
+      <p>Find median of two sorted arrays in logarithmic time is quite famous interview question (and a Leetcode problem from <em>hard</em> category).
 Let&rsquo;s generalize this question and solve it with python code. Just because we can.</p>
 <h2 id="median-in-two-sorted-arrays">Median in two sorted arrays <a href="#median-in-two-sorted-arrays" class="anchor">🔗</a></h2><p>First, let&rsquo;s define the problem:</p>
 <blockquote>
@@ -95,7 +95,8 @@ to find k-th element in two sorted arrays.</p>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> r <span style="color:#f92672">:=</span> k_order_two_sorted_binsearch(x, y, n1 <span style="color:#f92672">+</span> n2, n1, n2, k ):
 </span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">return</span> r
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> k_order_two_sorted_binsearch(y, x, n1 <span style="color:#f92672">+</span> n2, n2, n1, k )
-</span></span></code></pre></div><p>Now the solution of median problem will look like:</p>
+</span></span></code></pre></div><p>Observation: median is linear function of k-order statistics.
+Now the solution of median problem will look like:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">median_two_sorted_log</span>(x, y):
 </span></span><span style="display:flex;"><span>    n1, n2, n <span style="color:#f92672">=</span> len(x), len(y), len(x) <span style="color:#f92672">+</span> len(y)    
 </span></span><span style="display:flex;"><span>    lm <span style="color:#f92672">=</span> find_k_order_two_sorted(x, y, n1, n2, (n <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)<span style="color:#f92672">//</span><span style="color:#ae81ff">2</span>) 
@@ -104,7 +105,7 @@ to find k-th element in two sorted arrays.</p>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>:       
 </span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">return</span> (lm <span style="color:#f92672">+</span> find_k_order_two_sorted(x, y, n1, n2, n<span style="color:#f92672">//</span><span style="color:#ae81ff">2</span>)) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>
 </span></span></code></pre></div><h2 id="instead-of-conclusion">Instead of conclusion <a href="#instead-of-conclusion" class="anchor">🔗</a></h2><p>In this small article we investigated nice solution of MedianTwoSorted problem.
-Moreover more general problem of search k order statistic in two sorted arrays has been solved.</p>
+Moreover generalized version of the problem (with k order statistic instead of median) has been solved.</p>
     </div>
         <div class="tags">
                 <a href="http://mihael-tunik.github.io/tags/algorithms">algorithms</a>

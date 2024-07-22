@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width,minimum-scale=1">
 <meta name="description" content="Find median of two sorted arrays in logarithmic time is quite famous interview question (and a Leetcode problem from hard category).
 Let&rsquo;s generalize this question and solve it with python code. Just because we can.">
-<meta name="generator" content="Hugo 0.128.2">
+<meta name="generator" content="Hugo 0.129.0">
   <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
 <link rel="stylesheet" href="/css/style.css">
 <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
@@ -28,7 +28,7 @@ Let&rsquo;s generalize this question and solve it with python code. Just because
           ·
         </span>
         <span>
-          648 words
+          781 words
         </span>
         <span class="split">
           ·
@@ -46,6 +46,7 @@ Let&rsquo;s generalize this question and solve it with python code. Just because
   <ul>
     <li><a href="#median-in-two-sorted-arrays">Median in two sorted arrays</a></li>
     <li><a href="#k-order-static-in-two-sorted-arrays">K order static in two sorted arrays</a></li>
+    <li><a href="#how-good-is-logarithmic-solution">How good is logarithmic solution?</a></li>
     <li><a href="#instead-of-conclusion">Instead of conclusion</a></li>
   </ul>
 </nav>
@@ -55,7 +56,7 @@ Let&rsquo;s generalize this question and solve it with python code. Just because
     <div class="content">
       <p>Find median of two sorted arrays in logarithmic time is quite famous interview question (and a Leetcode problem from <em>hard</em> category).
 Let&rsquo;s generalize this question and solve it with python code. Just because we can.</p>
-<h2 id="median-in-two-sorted-arrays">Median in two sorted arrays <a href="#median-in-two-sorted-arrays" class="anchor">🔗</a></h2><p>First, let&rsquo;s define the median version of the problem:</p>
+<h2 id="median-in-two-sorted-arrays">Median in two sorted arrays <a href="#median-in-two-sorted-arrays" class="anchor">🔗</a></h2><p>First, let&rsquo;s define first problem:</p>
 <blockquote>
 <p>Given two integer arrays (sorted in ascending order) find <strong>median</strong> value of merged array.</p>
 </blockquote>
@@ -125,8 +126,41 @@ Now the solution of median problem will look like:</p>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>:       
 </span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">return</span> (lm <span style="color:#f92672">+</span> find_k_order_two_sorted(x, y, n1, n2, n<span style="color:#f92672">//</span><span style="color:#ae81ff">2</span>)) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>
 </span></span></code></pre></div><p>And that&rsquo;s it!</p>
+<h2 id="how-good-is-logarithmic-solution">How good is logarithmic solution? <a href="#how-good-is-logarithmic-solution" class="anchor">🔗</a></h2><p>Let&rsquo;s do some fair comparison for median version of the problem.
+This is the baseline code:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">merge_two_sorted</span>(x, y):
+</span></span><span style="display:flex;"><span>    l, m, result <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, []
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> l <span style="color:#f92672">!=</span> len(x) <span style="color:#f92672">and</span> m <span style="color:#f92672">!=</span> len(y):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> x[l] <span style="color:#f92672">&lt;</span> y[m]:
+</span></span><span style="display:flex;"><span>            result<span style="color:#f92672">.</span>append(x[l])
+</span></span><span style="display:flex;"><span>            l <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            result<span style="color:#f92672">.</span>append(y[m])
+</span></span><span style="display:flex;"><span>            m <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> l <span style="color:#f92672">!=</span> len(x):
+</span></span><span style="display:flex;"><span>        result<span style="color:#f92672">.</span>append(x[l])
+</span></span><span style="display:flex;"><span>        l <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> m <span style="color:#f92672">!=</span> len(y):
+</span></span><span style="display:flex;"><span>        result<span style="color:#f92672">.</span>append(y[m])
+</span></span><span style="display:flex;"><span>        m <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> result
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">median_two_sorted_linear</span>(x, y):
+</span></span><span style="display:flex;"><span>    merged <span style="color:#f92672">=</span> merge_two_sorted(x, y)
+</span></span><span style="display:flex;"><span>    n <span style="color:#f92672">=</span> len(merged)    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> n <span style="color:#f92672">%</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> merged[(n<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">//</span><span style="color:#ae81ff">2</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> (merged[(n<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">//</span><span style="color:#ae81ff">2</span>] <span style="color:#f92672">+</span> merged[n<span style="color:#f92672">//</span><span style="color:#ae81ff">2</span>])<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>
+</span></span></code></pre></div><p>It computes the median value for two sorted lists and has linear complexity.
+Let&rsquo;s do some tests for random arrays of sizes 30, 50, 100, 150, 200.
+Here&rsquo;s results showing boost in performance only growing with array size.
+<p class="markdown-image">
+  <img src="/images/performance.svg" alt="Integer labeling"  />
+</p></p>
 <h2 id="instead-of-conclusion">Instead of conclusion <a href="#instead-of-conclusion" class="anchor">🔗</a></h2><p>In this small article we investigated nice solution of MedianTwoSorted problem.
-Moreover generalized version of the problem (with k order statistic instead of median) has been solved.</p>
+Moreover generalized version of the problem (with k order statistic instead of median) has been solved.
+You can find full code <a href="https://github.com/mihael-tunik/train/tree/master/KOrderTwoSorted" target="_blank" rel="noopener">here</a>.</p>
     </div>
         <div class="tags">
                 <a href="http://mihael-tunik.github.io/tags/algorithms">algorithms</a>

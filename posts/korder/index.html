@@ -28,13 +28,13 @@ Let&rsquo;s generalize this question and solve it with python code. Just because
           ·
         </span>
         <span>
-          781 words
+          931 words
         </span>
         <span class="split">
           ·
         </span>
         <span>
-          4 minute read
+          5 minute read
         </span>
     </div>
     <aside class="toc">
@@ -74,8 +74,9 @@ to find k-th element in two sorted arrays.</p>
 So, arrays are <em>sorted</em> and we want <em>to find</em> some special element in logarithmic time.
 This gives us a hint that probably some binary search variation should be involved.</p>
 <p>Indeed, we can search for element <em>x[j]</em>, such as it is larger than <em>f(j) = k - j</em> elements in <em>y</em>.
-If such element exists it&rsquo;ll be exactly <em>k</em> order statistic in sorted array.</p>
-<p>Othewise such element should exist in <em>y</em>, if <em>0 &lt;= k &lt; n<sub>1</sub> + n<sub>2</sub></em>. Here&rsquo;s the code (32 lines):</p>
+If such element exists it&rsquo;ll be exactly <em>k</em> order statistic in sorted array.
+Othewise such element should exist in <em>y</em>, if <em>0 &lt;= k &lt; n<sub>1</sub> + n<sub>2</sub></em>.</p>
+<p>Here&rsquo;s the code (32 lines):</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">k_order_two_sorted_binsearch</span>(x, y, n, n1, n2, h):
 </span></span><span style="display:flex;"><span>    l, r, prev_state, state <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>, n1<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, (<span style="color:#ae81ff">0</span>, n1<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>), (<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> prev_state <span style="color:#f92672">!=</span> state: <span style="color:#75715e"># is there (l, r) update?    </span>
@@ -108,9 +109,23 @@ If such element exists it&rsquo;ll be exactly <em>k</em> order statistic in sort
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> r <span style="color:#f92672">:=</span> k_order_two_sorted_binsearch(x, y, n1 <span style="color:#f92672">+</span> n2, n1, n2, k ):
 </span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">return</span> r
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> k_order_two_sorted_binsearch(y, x, n1 <span style="color:#f92672">+</span> n2, n2, n1, k )
-</span></span></code></pre></div><p>Half of the function <em>k_order_two_sorted_binsearch()</em> is dancing around edge cases for <em>f(m)</em> value.
+</span></span></code></pre></div><p>Before we move to code explanation, I would like to look at this problem from monotonic sequence search view.
+<p class="markdown-image">
+  <img src="/images/korder_example.svg" alt="korder_table"  />
+</p>
+Let <em>c[j]</em> be number of elements in y less than <em>x[j]</em>, finally let&rsquo;s look at <em>f[j]-c[j]</em>.
+Sequence <em>f</em> is monotonic decreasing (number of elements in <em>y</em> that we need, just <em>k-j</em>), c is non-decreasing, so their difference is also monotonic decreasing.
+And by definition zero element in difference sequence corresponds to k order statistic.</p>
+<p>Unfortunately, we can&rsquo;t compute <em>f[j]-c[j]</em> in O(1) but luckily we don&rsquo;t need it.
+Instead we can compute predicate <em>sign(f[j]-c[j])</em> in constant time, as it was shown in code.
+This last observation gives us O(log(n<sub>1</sub>)) complexity for one call. With symmetrical call that gives us O(log(n<sub>1</sub>) + log(n<sub>2</sub>)) complexity.</p>
+<blockquote>
+<p>By the way, <em>f[j]-c[j]</em> can be computed in O(log(n<sub>2</sub>)) and that would give us O(log(n<sub>1</sub>) log(n<sub>2</sub>)), logarithmic-squared complexity,
+which is <em>not logarithmic enough</em>.</p>
+</blockquote>
+<p>Let&rsquo;s get back into code. Half of the function <em>k_order_two_sorted_binsearch()</em> is dancing around edge cases for <em>f(m)</em> value.
 It be reduced, however I think that code compressing here is not useful for clarity.</p>
-<p>This line</p>
+<p>This funny line</p>
 <pre tabindex="0"><code>l = m if l != r-1 else r
 </code></pre><p>is a way to avoid cycle on the last iterations:</p>
 <pre tabindex="0"><code>(l, l+1) -&gt; (l, l+1) -&gt; (l+1, l+1)

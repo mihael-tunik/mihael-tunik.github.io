@@ -6,8 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">    
 <meta name="viewport" content="width=device-width,minimum-scale=1">
 <meta name="description" content="Find median of two sorted arrays in logarithmic time is quite famous interview question (and a Leetcode problem from hard category).
-Let&rsquo;s generalize this question and solve it with python code. Just because we can.">
-<meta name="generator" content="Hugo 0.129.0">
+In this article I&rsquo;ll generalize this question and solve it with Python. Let&rsquo;s code!">
+<meta name="generator" content="Hugo 0.130.0">
   <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
 <link rel="stylesheet" href="/css/style.css">
 <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
@@ -28,7 +28,7 @@ Let&rsquo;s generalize this question and solve it with python code. Just because
           ·
         </span>
         <span>
-          931 words
+          1042 words
         </span>
         <span class="split">
           ·
@@ -46,7 +46,7 @@ Let&rsquo;s generalize this question and solve it with python code. Just because
   <ul>
     <li><a href="#median-in-two-sorted-arrays">Median in two sorted arrays</a></li>
     <li><a href="#k-order-static-in-two-sorted-arrays">K order static in two sorted arrays</a></li>
-    <li><a href="#how-good-is-logarithmic-solution">How good is logarithmic solution?</a></li>
+    <li><a href="#how-good-is-logarithmic-complexity-solution">How good is logarithmic complexity solution?</a></li>
     <li><a href="#instead-of-conclusion">Instead of conclusion</a></li>
   </ul>
 </nav>
@@ -55,14 +55,14 @@ Let&rsquo;s generalize this question and solve it with python code. Just because
     </aside>
     <div class="content">
       <p>Find median of two sorted arrays in logarithmic time is quite famous interview question (and a Leetcode problem from <em>hard</em> category).
-Let&rsquo;s generalize this question and solve it with python code. Just because we can.</p>
+In this article I&rsquo;ll generalize this question and solve it with Python. Let&rsquo;s code!</p>
 <h2 id="median-in-two-sorted-arrays">Median in two sorted arrays <a href="#median-in-two-sorted-arrays" class="anchor">🔗</a></h2><p>First, let&rsquo;s define first problem:</p>
 <blockquote>
 <p>Given two integer arrays (sorted in ascending order) find <strong>median</strong> value of merged array.</p>
 </blockquote>
 <p>Reminder: median is central element in odd case and average of central elements in even case.
 This question is not a big deal, when you&rsquo;re not limited by computational complexity.
-Indeed, two sorted arrays can be merged in O(n) and then median value can be returned in O(1).</p>
+For example, two sorted arrays can be merged in O(n) and then median value can be returned in O(1).</p>
 <p>Because of that, classic version of the problem includes condition that it should be solved in <em>logarithmic time</em>
 and that makes things more interesting.</p>
 <h2 id="k-order-static-in-two-sorted-arrays">K order static in two sorted arrays <a href="#k-order-static-in-two-sorted-arrays" class="anchor">🔗</a></h2><p>Now, let&rsquo;s state a little more general question:
@@ -120,18 +120,16 @@ And by definition zero element in difference sequence corresponds to k order sta
 Instead we can compute predicate <em>sign(f[j]-c[j])</em> in constant time, as it was shown in code.
 This last observation gives us O(log(n<sub>1</sub>)) complexity for one call. With symmetrical call that gives us O(log(n<sub>1</sub>) + log(n<sub>2</sub>)) complexity.</p>
 <blockquote>
-<p>By the way, <em>f[j]-c[j]</em> can be computed in O(log(n<sub>2</sub>)) and that would give us O(log(n<sub>1</sub>) log(n<sub>2</sub>)), logarithmic-squared complexity,
-which is <em>not logarithmic enough</em>.</p>
+<p>By the way, <em>f[j]-c[j]</em> can be computed in O(log(n<sub>2</sub>)) and that would give us O(log(n<sub>1</sub>) log(n<sub>2</sub>)), logarithmic-squared complexity, which is <em>not logarithmic enough</em>.</p>
 </blockquote>
-<p>Let&rsquo;s get back into code. Half of the function <em>k_order_two_sorted_binsearch()</em> is dancing around edge cases for <em>f(m)</em> value.
-It be reduced, however I think that code compressing here is not useful for clarity.</p>
+<p>Let&rsquo;s get back into code. Half of the function <em>k_order_two_sorted_binsearch()</em> is dancing around edge cases for <em>f(m)</em> value. It can be reduced, however I think that code compressing here is not useful for clarity.</p>
 <p>This funny line</p>
 <pre tabindex="0"><code>l = m if l != r-1 else r
 </code></pre><p>is a way to avoid cycle on the last iterations:</p>
 <pre tabindex="0"><code>(l, l+1) -&gt; (l, l+1) -&gt; (l+1, l+1)
 </code></pre><p>instead of</p>
 <pre tabindex="0"><code>(l, l+1) -&gt; (l, l+1) -&gt; (l, l+1) -&gt; ...
-</code></pre><p>Let&rsquo;s move back to median. Observation: median is linear function of k-order statistics.
+</code></pre><p>Let&rsquo;s move back to median. Observation: median is linear function of two k-order statistics: k = floor((n<sub>1</sub>+n<sub>2</sub>-1)/2) and k+1.
 Now the solution of median problem will look like:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">median_two_sorted_log</span>(x, y):
 </span></span><span style="display:flex;"><span>    n1, n2, n <span style="color:#f92672">=</span> len(x), len(y), len(x) <span style="color:#f92672">+</span> len(y)    
@@ -141,7 +139,15 @@ Now the solution of median problem will look like:</p>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>:       
 </span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">return</span> (lm <span style="color:#f92672">+</span> find_k_order_two_sorted(x, y, n1, n2, n<span style="color:#f92672">//</span><span style="color:#ae81ff">2</span>)) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>
 </span></span></code></pre></div><p>And that&rsquo;s it!</p>
-<h2 id="how-good-is-logarithmic-solution">How good is logarithmic solution? <a href="#how-good-is-logarithmic-solution" class="anchor">🔗</a></h2><p>Let&rsquo;s do some fair comparison for median version of the problem.
+<p>Four logarithmic calls in worst case (even size of merged array and both misses in <em>find_k_order_two_sorted()</em>) isn&rsquo;t very satisfying result for median problem.
+If you want more competitive solution you can modify <em>find_k_order_two_sorted</em> so it will return k-th and k+1-th elements
+for one run.</p>
+<blockquote>
+<p>Because when you found <em>x[m]</em> which you are going to return from function the next k+1-th element in merged array would be either <em>x[m+1]</em> or <em>y[f_m]</em>.
+Such modification ensure complexity O(log(n<sub>1</sub>) + log(n<sub>2</sub>)).</p>
+</blockquote>
+<p>Try to fix it by your own or check out my modified version of <a href="https://github.com/mihael-tunik/train/blob/master/KOrderTwoSorted/KOrderTwoSortedModified.py" target="_blank" rel="noopener">code</a>.</p>
+<h2 id="how-good-is-logarithmic-complexity-solution">How good is logarithmic complexity solution? <a href="#how-good-is-logarithmic-complexity-solution" class="anchor">🔗</a></h2><p>Let&rsquo;s do some fair comparison for median version of the problem.
 This is the baseline code:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">merge_two_sorted</span>(x, y):
 </span></span><span style="display:flex;"><span>    l, m, result <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, []
@@ -167,8 +173,11 @@ This is the baseline code:</p>
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> merged[(n<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">//</span><span style="color:#ae81ff">2</span>]
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>:
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> (merged[(n<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">//</span><span style="color:#ae81ff">2</span>] <span style="color:#f92672">+</span> merged[n<span style="color:#f92672">//</span><span style="color:#ae81ff">2</span>])<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>
-</span></span></code></pre></div><p>It computes the median value for two sorted lists and has linear complexity.
-Let&rsquo;s do some tests for random arrays of sizes 30, 50, 100, 150, 200.
+</span></span></code></pre></div><p>It computes the median value for two sorted lists and has linear complexity.</p>
+<blockquote>
+<p>By the way, can you modify this code to O(k)?</p>
+</blockquote>
+<p>Let&rsquo;s do some tests for random arrays of sizes 30, 50, 100, 150, 200.
 Here&rsquo;s results showing boost in performance only growing with array size.
 <p class="markdown-image">
   <img src="/images/performance.svg" alt="Integer labeling"  />

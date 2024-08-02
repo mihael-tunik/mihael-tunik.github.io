@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width,minimum-scale=1">
 <meta name="description" content="Find median of two sorted arrays in logarithmic time is quite famous interview question (and a Leetcode problem from hard category).
 In this article I&rsquo;ll generalize this question and solve it with Python. Let&rsquo;s code!">
-<meta name="generator" content="Hugo 0.130.0">
+<meta name="generator" content="Hugo 0.131.0">
 <link rel="stylesheet" href="/css/style.css">
 <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
   </head>
@@ -27,13 +27,13 @@ In this article I&rsquo;ll generalize this question and solve it with Python. Le
           ·
         </span>
         <span>
-          1042 words
+          1123 words
         </span>
         <span class="split">
           ·
         </span>
         <span>
-          5 minute read
+          6 minute read
         </span>
     </div>
     <aside class="toc">
@@ -117,7 +117,7 @@ Sequence <em>f</em> is monotonic decreasing (number of elements in <em>y</em> th
 And by definition zero element in difference sequence corresponds to k order statistic.</p>
 <p>Unfortunately, we can&rsquo;t compute <em>f[j]-c[j]</em> in O(1) but luckily we don&rsquo;t need it.
 Instead we can compute predicate <em>sign(f[j]-c[j])</em> in constant time, as it was shown in code.
-This last observation gives us O(log(n<sub>1</sub>)) complexity for one call. With symmetrical call that gives us O(log(n<sub>1</sub>) + log(n<sub>2</sub>)) complexity.</p>
+This last observation gives us O(log(n<sub>1</sub>)) complexity for one <em>k_order_two_sorted_binsearch(x, y, &hellip;)</em> call. With symmetrical <em>k_order_two_sorted_binsearch(y, x, &hellip;)</em> call that gives us O(log(n<sub>1</sub>) + log(n<sub>2</sub>)) complexity.</p>
 <blockquote>
 <p>By the way, <em>f[j]-c[j]</em> can be computed in O(log(n<sub>2</sub>)) and that would give us O(log(n<sub>1</sub>) log(n<sub>2</sub>)), logarithmic-squared complexity, which is <em>not logarithmic enough</em>.</p>
 </blockquote>
@@ -137,16 +137,26 @@ Now the solution of median problem will look like:</p>
 </span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">return</span> lm
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>:       
 </span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">return</span> (lm <span style="color:#f92672">+</span> find_k_order_two_sorted(x, y, n1, n2, n<span style="color:#f92672">//</span><span style="color:#ae81ff">2</span>)) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>
-</span></span></code></pre></div><p>And that&rsquo;s it!</p>
-<p>Four logarithmic calls in worst case (even size of merged array and both misses in <em>find_k_order_two_sorted()</em>) isn&rsquo;t very satisfying result for median problem.
-If you want more competitive solution you can modify <em>find_k_order_two_sorted</em> so it will return k-th and k+1-th elements
-for one run.</p>
+</span></span></code></pre></div><p>And finally, four logarithmic calls in worst case (even size of merged array and both misses in <em>find_k_order_two_sorted()</em>) isn&rsquo;t very satisfying result for median problem.
+If you want more competitive solution you can easily modify <em>k_order_two_sorted_binsearch()</em> in a way it will return k-th and k+1-th order statistics
+in one function call.</p>
 <blockquote>
-<p>Because when you found <em>x[m]</em> which you are going to return from function the next k+1-th element in merged array would be either <em>x[m+1]</em> or <em>y[f_m]</em>.
-Such modification ensure complexity O(log(n<sub>1</sub>) + log(n<sub>2</sub>)).</p>
+<p>It&rsquo;s because when you found <em>x[m]</em> which you are going to return from function the next k+1-th element in merged array would be either <em>x[m+1]</em> or <em>y[f_m]</em>.</p>
 </blockquote>
-<p>Try to fix it by your own or check out my modified version of <a href="https://github.com/mihael-tunik/train/blob/master/KOrderTwoSorted/KOrderTwoSortedModified.py" target="_blank" rel="noopener">code</a>.</p>
-<h2 id="how-good-is-logarithmic-complexity-solution">How good is logarithmic complexity solution? <a href="#how-good-is-logarithmic-complexity-solution" class="anchor">🔗</a></h2><p>Let&rsquo;s do some fair comparison for median version of the problem.
+<p>This way the number of logarithmic calls will reduce by factor of two. And such modification ensure complexity O(log(n<sub>1</sub>) + log(n<sub>2</sub>)).
+Modified solution look like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">median_two_sorted_log_modified</span>(x, y):
+</span></span><span style="display:flex;"><span>    n1, n2, n <span style="color:#f92672">=</span> len(x), len(y), len(x) <span style="color:#f92672">+</span> len(y)    
+</span></span><span style="display:flex;"><span>    lm, rm <span style="color:#f92672">=</span> find_k_order_two_sorted_modified(x, y, n1, n2, (n <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)<span style="color:#f92672">//</span><span style="color:#ae81ff">2</span>) 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (n1 <span style="color:#f92672">+</span> n2) <span style="color:#f92672">%</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>:
+</span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">return</span> lm
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>:       
+</span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">return</span> (lm <span style="color:#f92672">+</span> rm) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>
+</span></span></code></pre></div><blockquote>
+<p>Code of <em>find_k_order_two_sorted_modified()</em> is very similar to original version.
+Try to fix <em>k_order_two_sorted_binsearch()</em> by your own or check out my modified <a href="https://github.com/mihael-tunik/train/blob/master/KOrderTwoSorted/KOrderTwoSortedModified.py" target="_blank" rel="noopener">version</a> of code.</p>
+</blockquote>
+<h2 id="how-good-is-logarithmic-complexity-solution">How good is logarithmic complexity solution? <a href="#how-good-is-logarithmic-complexity-solution" class="anchor">🔗</a></h2><p>Let&rsquo;s do some fair comparison for the median version of the problem.
 This is the baseline code:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">merge_two_sorted</span>(x, y):
 </span></span><span style="display:flex;"><span>    l, m, result <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, []
@@ -172,7 +182,7 @@ This is the baseline code:</p>
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> merged[(n<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">//</span><span style="color:#ae81ff">2</span>]
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>:
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> (merged[(n<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">//</span><span style="color:#ae81ff">2</span>] <span style="color:#f92672">+</span> merged[n<span style="color:#f92672">//</span><span style="color:#ae81ff">2</span>])<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>
-</span></span></code></pre></div><p>It computes the median value for two sorted lists and has linear complexity.</p>
+</span></span></code></pre></div><p>It computes the median value for two sorted lists in linear time.</p>
 <blockquote>
 <p>By the way, can you modify this code to O(k)?</p>
 </blockquote>
@@ -182,7 +192,7 @@ Here&rsquo;s results showing boost in performance only growing with array size.
   <img src="/images/performance.svg" alt="Integer labeling"  />
 </p></p>
 <h2 id="instead-of-conclusion">Instead of conclusion <a href="#instead-of-conclusion" class="anchor">🔗</a></h2><p>In this small article we investigated nice solution of MedianTwoSorted problem.
-Moreover generalized version of the problem (with k order statistic instead of median) has been solved.
+Moreover generalized version of the problem (with k order statistic instead of median) has been solved by original algorithm.
 You can find full code <a href="https://github.com/mihael-tunik/train/tree/master/KOrderTwoSorted" target="_blank" rel="noopener">here</a>.</p>
     </div>
         <div class="tags">
@@ -215,6 +225,7 @@ You can find full code <a href="https://github.com/mihael-tunik/train/tree/maste
        2024 
        <span class="split">
         <svg fill="#bbbbbb" width="15" height="15" version="1.1" id="heart-15" xmlns="http://www.w3.org/2000/svg" width="15px" height="15px" viewBox="0 0 15 15">
+  
 </svg>
        </span>
     </div>

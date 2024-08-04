@@ -244,6 +244,19 @@ nav.navigation a.button {
   margin: 0 4px;
 }
 
+.title_tags_container{
+  width: 500px;
+  display: flex;
+  border-radius: 30px;
+}
+
+.single_tag_item{
+  background-color: #bfd8ec;
+  margin: 5px 5px;
+  padding: 7px 7px;
+  border-radius: 8px;
+}
+
 /* main content */
 .main {
   width: 100%;
@@ -295,7 +308,7 @@ nav.navigation a.button {
   border: solid #b3c7e0;
   border-radius: 15px 15px;
   box-shadow: 1px 1px 1px;
-  align: center
+  align: center;
 }
 
 #list-page .title {

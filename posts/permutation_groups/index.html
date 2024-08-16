@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en-us">
   <head>
-    <title>mini-blog</title>
+    <title>Permutation groups (draft) | mini-blog</title>
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">    
 <meta name="viewport" content="width=device-width,minimum-scale=1">
-<meta name="description" content="">
+<meta name="description" content="Let&rsquo;s talk about permutation and groups.
+In this article I&rsquo; d like to talk about computational group theory.
+In the end I&rsquo;ll show a fun way to represent Rubick&rsquo;s cube.">
 <meta name="generator" content="Hugo 0.132.2">
 <link rel="stylesheet" href="/css/style.css">
 <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
@@ -18,31 +20,68 @@
 	<a href="/about">About</a>
 </nav>
     <main class="main">
-<header class="profile">
-        <img class="avatar" alt="logo" src="/images/logo.svg" />
-    <h1>mini-blog</h1>
-</header>
-<section id="tags">
-              <span class="tag">
-                  <a href="/tags/algorithms">
-                    ALGORITHMS <span>(3)</span>
-                </a>
-              </span>
-              <span class="tag">
-                  <a href="/tags/python">
-                    PYTHON <span>(2)</span>
-                </a>
-              </span>
-              <span class="tag">
-                  <a href="/tags/tutorials">
-                    TUTORIALS <span>(2)</span>
-                </a>
-              </span>
-              <span class="tag">
-                  <a href="/tags/cpp">
-                    CPP <span>(1)</span>
-                </a>
-              </span>
+<section id="single">
+    <h1 class="title">Permutation groups (draft)</h1>
+    <div class="tip">
+        <time datetime="2024-08-16 00:00:00 &#43;0000 UTC">Aug 16, 2024</time>
+        <span class="split">
+          ·
+        </span>
+        <span>
+          183 words
+        </span>
+        <span class="split">
+          ·
+        </span>
+        <span>
+          1 minute read
+        </span>
+    </div>
+    <aside class="toc">
+      <details>
+          <summary>Table of Contents
+          </summary>
+          <div>
+              <nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#instead-of-conclusion">Instead of conclusion</a></li>
+  </ul>
+</nav>
+          </div>
+      </details>
+    </aside>
+    <div class="content">
+      <p>Let&rsquo;s talk about permutation and groups.
+In this article I&rsquo; d like to talk about computational group theory.
+In the end I&rsquo;ll show a fun way to represent Rubick&rsquo;s cube.</p>
+<h2 id="introduction">Introduction <a href="#introduction" class="anchor">🔗</a></h2><p>I&rsquo;ll never finish this article if I don&rsquo;t start to write it&hellip;</p>
+<h2 id="instead-of-conclusion">Instead of conclusion <a href="#instead-of-conclusion" class="anchor">🔗</a></h2><p>Recently I came across this nice way to represent cubes as planar graphs. Isn&rsquo;t that nice?
+<p class="markdown-image">
+  <img src="/images/cube2x2_id.svg" alt="korder_table"  />
+</p>
+To rotate a permutation there&rsquo;s <em>inner rotation</em>, example:
+<p class="markdown-image">
+  <img src="/images/cube2x2_r1.svg" alt="korder_table"  />
+</p>
+<p class="markdown-image">
+  <img src="/images/cube2x2_r2.svg" alt="korder_table"  />
+</p>
+And <em>outer rotation</em>:
+<p class="markdown-image">
+  <img src="/images/cube2x2_r3.svg" alt="korder_table"  />
+</p>
+Corresponding permutations are</p>
+<pre tabindex="0"><code>[[1 , 13, 9, 3 , 23, 6 , 7 , 14, 10, 4 , 24, 12, 11, 5 , 15, 16, 17, 18, 19, 20, 21, 22, 8 , 2 ],
+ [1 , 2 , 3, 14, 11, 5 , 7 , 8 , 9 , 16, 12, 6 , 13, 18, 15, 20, 17, 22, 19, 24, 21, 4 , 23, 10],
+ [22, 2 , 3, 4 , 5 , 16, 21, 8 , 9 , 10, 11, 15, 13, 14, 1 , 7 , 19, 17, 20, 18, 6 , 12, 23, 24]]
+</code></pre><p>They are generating Rubick&rsquo;s cube (pocket, 2x2 version) cube permutation group.</p>
+    </div>
+        <div class="tags">
+                <a href="http://mihael-tunik.github.io/tags/algorithms">algorithms</a>
+                <a href="http://mihael-tunik.github.io/tags/tutorials">tutorials</a>
+                <a href="http://mihael-tunik.github.io/tags/python">python</a>
+        </div>
 </section>
     </main>
     <footer id="footer">

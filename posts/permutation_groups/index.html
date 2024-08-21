@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en-us">
   <head>
-    <title>Permutation groups (draft) | mini-blog</title>
+    <title>Permutation groups | mini-blog</title>
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">    
 <meta name="viewport" content="width=device-width,minimum-scale=1">
 <meta name="description" content="Let&rsquo;s talk about permutations, groups and what is common between them.
-In this article I&rsquo;d like to talk about computational group theory.
-In the end I&rsquo;ll show a fun way to represent Rubick&rsquo;s cube.">
+In this article we will look at Sims-Schreier algorithm and in the end I&rsquo;ll show a fun way to represent Rubick&rsquo;s cube.">
 <meta name="generator" content="Hugo 0.133.0">
 <link rel="stylesheet" href="/css/style.css">
 <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
@@ -21,14 +20,14 @@ In the end I&rsquo;ll show a fun way to represent Rubick&rsquo;s cube.">
 </nav>
     <main class="main">
 <section id="single">
-    <h1 class="title">Permutation groups (draft)</h1>
+    <h1 class="title">Permutation groups</h1>
     <div class="tip">
         <time datetime="2024-08-16 00:00:00 &#43;0000 UTC">Aug 16, 2024</time>
         <span class="split">
           ·
         </span>
         <span>
-          431 words
+          548 words
         </span>
         <span class="split">
           ·
@@ -53,51 +52,87 @@ In the end I&rsquo;ll show a fun way to represent Rubick&rsquo;s cube.">
     </aside>
     <div class="content">
       <p>Let&rsquo;s talk about permutations, groups and what is common between them.
-In this article I&rsquo;d like to talk about computational group theory.
-In the end I&rsquo;ll show a fun way to represent Rubick&rsquo;s cube.</p>
-<h2 id="introduction">Introduction <a href="#introduction" class="anchor">🔗</a></h2><p>Here&rsquo;s my modified version based on the code from internet article and C.Sims survey.</p>
-<pre tabindex="0"><code>def BuildSchreierTree(i, S, orbit):
-    for g in S:
-        if g[i-1] not in orbit:
-            orbit[g[i-1]] = mult(g, orbit[i])
-            BuildSchreierTree(g[i-1], S, orbit)
-def BuildSchreierGenerators(S, orbit):
-    S_gen = set()
-    for g in S:
-        for u in orbit:
-            schreier_generator = mult(inv(orbit[g[u-1]]), g, orbit[u])
-            S_gen.add(schreier_generator) 
-    return S_gen
-def SimsFilter(S, n):    
-    u = [[-1]*n] * n # only for j &gt; i
-    for g in S:
-        h = g        
-        for i in range(1, n+1):
-            j = h[i-1]
-            if j &gt; i:
-                if u[i-1][j-1] == -1:
-                    u[i-1][j-1] = h
-                    break
-                else:
-                    h = mult(inv(u[i-1][j-1]), h)
-    S_reduced = set()
-    for i in range(0, n):
-        for j in range(0, n):
-            if u[i][j] != -1:
-                S_reduced.add(u[i][j])
-    return S_reduced
-def SchreierSims(S):
-    n = len(S[0])    
-    ans, group_order, i = [], 1, 1
-    while len(S) != 0 and i &lt;= n:
-        orbit = {i : tuple(range(1, n+1))}
-        BuildSchreierTree(i, S, orbit)
-        R = [orbit[j] for j in orbit]
-        S = SimsFilter(BuildSchreierGenerators(S, orbit), n)
-        ans += [R]
-        group_order, i = group_order * len(R), i + 1 
-    return ans, group_order
-</code></pre><h2 id="instead-of-conclusion">Instead of conclusion <a href="#instead-of-conclusion" class="anchor">🔗</a></h2><p>Recently, I came across this nice way to represent Rubick&rsquo;s cubes as planar graphs.
+In this article we will look at Sims-Schreier algorithm and in the end I&rsquo;ll show a fun way to represent Rubick&rsquo;s cube.</p>
+<h2 id="introduction">Introduction <a href="#introduction" class="anchor">🔗</a></h2><p>Basic operations with permutations.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>def mult(<span style="color:#f92672">*</span>p_chain)<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    res <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i in range(<span style="color:#ae81ff">0</span>, len(p_chain[<span style="color:#ae81ff">0</span>]))<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>        image <span style="color:#f92672">=</span> i
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># x o y = x(y(S)), rightmost first
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">for</span> p in reversed(p_chain)<span style="color:#f92672">:</span> 
+</span></span><span style="display:flex;"><span>            image <span style="color:#f92672">=</span> p[image] <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span> 
+</span></span><span style="display:flex;"><span>        res.append(image <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> tuple(res)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>def inv(x)<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    res <span style="color:#f92672">=</span> list(deepcopy(x))
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i in range(<span style="color:#ae81ff">0</span>, len(x))<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>        res[x[i] <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> tuple(res)
+</span></span></code></pre></div><p>Sometimes we want to know how large is group generated by some permutations.
+If resulting group is small you may prefer simple depth-first search.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>def BuildGroupDfs(p, S, group)<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> g in S:
+</span></span><span style="display:flex;"><span>        h <span style="color:#f92672">=</span> mult(g, p)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> h not in group:
+</span></span><span style="display:flex;"><span>            group.add(h)
+</span></span><span style="display:flex;"><span>            BuildGroupDfs(h, S, group)
+</span></span></code></pre></div><p>For large resulting groups Sims-Schreier algorithm is way to go.
+Here&rsquo;s my modified Python version of this algorithm based on the code from internet article and Charles Sims survey.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>def <span style="color:#a6e22e">BuildSchreierTree</span>(i, S, orbit)<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> g in S:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> g[i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>] not in orbit:
+</span></span><span style="display:flex;"><span>            orbit[g[i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]] <span style="color:#f92672">=</span> mult(g, orbit[i])
+</span></span><span style="display:flex;"><span>            BuildSchreierTree(g[i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>], S, orbit)
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>def BuildSchreierGenerators(S, orbit)<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    S_gen <span style="color:#f92672">=</span> set()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> g in S:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> u in orbit:
+</span></span><span style="display:flex;"><span>            schreier_generator <span style="color:#f92672">=</span> mult(inv(orbit[g[u<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]]), g, orbit[u])
+</span></span><span style="display:flex;"><span>            S_gen.add(schreier_generator) 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> S_gen
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>def SimsFilter(S, n)<span style="color:#f92672">:</span>    
+</span></span><span style="display:flex;"><span>    u <span style="color:#f92672">=</span> [[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">*</span>n] <span style="color:#f92672">*</span> n 
+</span></span><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">#</span> only <span style="color:#66d9ef">for</span> j <span style="color:#f92672">&gt;</span> i
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> g in S:
+</span></span><span style="display:flex;"><span>        h <span style="color:#f92672">=</span> g        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> i in range(<span style="color:#ae81ff">1</span>, n<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>            j <span style="color:#f92672">=</span> h[i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> j <span style="color:#f92672">&gt;</span> i:
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> u[i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>][j<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                    u[i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>][j<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> h
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">else</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                    h <span style="color:#f92672">=</span> mult(inv(u[i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>][j<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]), h)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    S_reduced <span style="color:#f92672">=</span> set()
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i in range(<span style="color:#ae81ff">0</span>, n)<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> j in range(<span style="color:#ae81ff">0</span>, n)<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> u[i][j] <span style="color:#f92672">!=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                S_reduced.add(u[i][j])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> S_reduced
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>def SchreierSims(S)<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    n <span style="color:#f92672">=</span> len(S[<span style="color:#ae81ff">0</span>])    
+</span></span><span style="display:flex;"><span>    ans, group_order, i <span style="color:#f92672">=</span> [], <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> len(S) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span> and i <span style="color:#f92672">&lt;=</span> n:
+</span></span><span style="display:flex;"><span>        orbit <span style="color:#f92672">=</span> {i : tuple(range(<span style="color:#ae81ff">1</span>, n<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>))}
+</span></span><span style="display:flex;"><span>        BuildSchreierTree(i, S, orbit)
+</span></span><span style="display:flex;"><span>       
+</span></span><span style="display:flex;"><span>        R <span style="color:#f92672">=</span> [orbit[j] <span style="color:#66d9ef">for</span> j in orbit]
+</span></span><span style="display:flex;"><span>        S <span style="color:#f92672">=</span> SimsFilter(BuildSchreierGenerators(S, orbit), n)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        ans <span style="color:#f92672">+=</span> [R]
+</span></span><span style="display:flex;"><span>        group_order, i <span style="color:#f92672">=</span> group_order <span style="color:#f92672">*</span> len(R), i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span> 
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ans, group_order
+</span></span></code></pre></div><h2 id="instead-of-conclusion">Instead of conclusion <a href="#instead-of-conclusion" class="anchor">🔗</a></h2><p>Recently, I came across this nice way to represent Rubick&rsquo;s cubes as planar graphs.
 <p class="markdown-image">
   <img src="/images/cube2x2_id.svg" alt="cube2x2_id"  />
 </p>
@@ -121,14 +156,13 @@ And so inner and outer rotations are coincide up to graph vertices permutation.<
  [22, 2 , 3, 4 , 5 , 16, 21, 8 , 9 , 10, 11, 15, 13, 14, 1 , 7 , 19, 17, 20, 18, 6 , 12, 23, 24]]
 </code></pre><p>For 2x2 version of Rubick&rsquo;s cube they are enough to generate whole permutation group.
 Let&rsquo;s check our algorithm:</p>
-<pre tabindex="0"><code>&gt;&gt;&gt; R, group_order = SchreierSims(generators)
-&gt;&gt;&gt; print(group_order)
-&gt;&gt;&gt; 88179840
-</code></pre><p>This number coincide with known results.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> R, group_order <span style="color:#f92672">=</span> SchreierSims(generators)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> print(group_order)
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#ae81ff">88179840</span>
+</span></span></code></pre></div><p>This number coincide with known results.</p>
     </div>
         <div class="tags">
                 <a href="http://mihael-tunik.github.io/tags/algorithms">algorithms</a>
-                <a href="http://mihael-tunik.github.io/tags/group-theory">group theory</a>
                 <a href="http://mihael-tunik.github.io/tags/python">python</a>
                 <a href="http://mihael-tunik.github.io/tags/tutorials">tutorials</a>
         </div>

@@ -6,10 +6,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">    
 <meta name="viewport" content="width=device-width,minimum-scale=1">
 <meta name="description" content="In mathematics, when you change the order of elements in some collection it is called a permutation.
-You can multiply permutations and for given permutation you can always find inverse one which neutralizes its action.
-This means they form a group. And this group has been studied a lot.
-In this article we will look at Sims-Schreier algorithm in context of group order computation
-and in the end I&rsquo;ll show a fun way to represent Rubick&rsquo;s cube.">
+You can &ldquo;multiply&rdquo; permutations by taking their composition and for given permutation you can always find inverse one which simply reverses its action.
+And also we can imagine identity permutation which does nothing with order of elements.
+This means permutations can form a very special algebraic structures, groups (remember, compositions are associative).
+Such permutation groups has been studied a lot and there&rsquo;s a whole world of algorithms around them.
+In this article we&rsquo;ll look at Sims-Schreier algorithm in context of group order computation and in the end I&rsquo;ll show a fun way to represent Rubick&rsquo;s cube.
+Let&rsquo;s dive in!">
 <meta name="generator" content="Hugo 0.133.0">
 <link rel="stylesheet" href="/css/style.css">
 <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
@@ -30,13 +32,13 @@ and in the end I&rsquo;ll show a fun way to represent Rubick&rsquo;s cube.">
           ·
         </span>
         <span>
-          684 words
+          892 words
         </span>
         <span class="split">
           ·
         </span>
         <span>
-          4 minute read
+          5 minute read
         </span>
     </div>
     <aside class="toc">
@@ -47,6 +49,8 @@ and in the end I&rsquo;ll show a fun way to represent Rubick&rsquo;s cube.">
               <nav id="TableOfContents">
   <ul>
     <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#group-order">Group order</a></li>
+    <li><a href="#sims-schreier-algorithm">Sims-Schreier algorithm</a></li>
     <li><a href="#instead-of-conclusion">Instead of conclusion</a></li>
   </ul>
 </nav>
@@ -55,10 +59,12 @@ and in the end I&rsquo;ll show a fun way to represent Rubick&rsquo;s cube.">
     </aside>
     <div class="content">
       <p>In mathematics, when you change the order of elements in some collection it is called a permutation.
-You can multiply permutations and for given permutation you can always find inverse one which neutralizes its action.
-This means they form a group. And this group has been studied a lot.
-In this article we will look at Sims-Schreier algorithm in context of group order computation
-and in the end I&rsquo;ll show a fun way to represent Rubick&rsquo;s cube.</p>
+You can &ldquo;multiply&rdquo; permutations by taking their composition and for given permutation you can always find inverse one which simply reverses its action.
+And also we can imagine identity permutation which does nothing with order of elements.
+This means permutations can form a very special algebraic structures, groups (remember, compositions are associative).
+Such permutation groups has been studied a lot and there&rsquo;s a whole world of algorithms around them.
+In this article we&rsquo;ll look at Sims-Schreier algorithm in context of group order computation and in the end I&rsquo;ll show a fun way to represent Rubick&rsquo;s cube.
+Let&rsquo;s dive in!</p>
 <h2 id="introduction">Introduction <a href="#introduction" class="anchor">🔗</a></h2><p>First let&rsquo;s define basic operations with permutations.
 Permutations are stored coordinatewise:
 <em>x({1, &hellip;, n}) = {x<sub>1</sub>(1), &hellip;, x<sub>n</sub>(n)}</em>.
@@ -67,6 +73,7 @@ With multiplication let&rsquo;s follow rightmost first notation, which means tha
 <p>For <em>S = {1, &hellip;, n}</em> we define <em>x * y = x(y(S))</em>.
 Then inverse is defined as permutation <em>x<sub>inv</sub></em> such as <em>x(x<sub>inv</sub>(S)) = S</em> or <em>x * x<sub>inv</sub> = identity</em>.</p>
 </blockquote>
+<p>Here&rsquo;s the code:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>def mult(<span style="color:#f92672">*</span>p_chain)<span style="color:#f92672">:</span>
 </span></span><span style="display:flex;"><span>    res <span style="color:#f92672">=</span> []
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i in range(<span style="color:#ae81ff">0</span>, len(p_chain[<span style="color:#ae81ff">0</span>]))<span style="color:#f92672">:</span>
@@ -82,8 +89,11 @@ Then inverse is defined as permutation <em>x<sub>inv</sub></em> such as <em>x(x<
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i in range(<span style="color:#ae81ff">0</span>, len(x))<span style="color:#f92672">:</span>
 </span></span><span style="display:flex;"><span>        res[x[i] <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> tuple(res)
-</span></span></code></pre></div><p>Sometimes we want to know how large is group generated by some permutations.
-If resulting group is small you may prefer simple depth-first search.
+</span></span></code></pre></div><h2 id="group-order">Group order <a href="#group-order" class="anchor">🔗</a></h2><p>Every set of permutations generate some group, minimal set of permutations which contains starting permutations
+and closed under multiplication.
+Starting groups called <em>generators</em>. Size of group is called <em>group order</em>.</p>
+<p>Often we want to know how large is group generated by some permutations.
+If you expect resulting group to be small you may prefer simple depth-first search.
 Start from identity permutation and explore group as graph:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>def BuildGroupDfs(p, S, group)<span style="color:#f92672">:</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> g in S:
@@ -94,8 +104,23 @@ Start from identity permutation and explore group as graph:</p>
 </span></span></code></pre></div><blockquote>
 <p>By the way, tree of recursive calls here can degenerate to long chain. Build an example.</p>
 </blockquote>
-<p>For large resulting groups Sims-Schreier algorithm is way to go.</p>
-<p>&hellip; TO DO: description</p>
+<p>If resulting group are expected to be huge (the most common case) then Sims-Schreier algorithm is way to go.</p>
+<h2 id="sims-schreier-algorithm">Sims-Schreier algorithm <a href="#sims-schreier-algorithm" class="anchor">🔗</a></h2><p>Main idea of algorithm is to decompose our group <em>G</em> into the chain of stabilizer subgroups.
+Each group in chain G<sub>i</sub> should be subgroup of previous one G<sub>i-1</sub>.
+Then every element <em>g</em> of <em>G</em> has unique representation as product of right transversals R<sub>i</sub> of G<sub>i</sub> in G<sub>i-1</sub>:</p>
+<blockquote>
+<p><em>g = r<sub>1</sub> * r<sub>2</sub> &hellip; * r<sub>n</sub></em> for <em>r<sub>1</sub> from R<sub>1</sub>, r<sub>2</sub> from R<sub>2</sub>, &hellip;</em>.</p>
+</blockquote>
+<p>The order of <em>G</em> therefore is the product of sizes of <em>R<sub>i</sub></em>.</p>
+<blockquote>
+<p>By iterating through every <em>R<sub>i</sub></em> it&rsquo;s easy to list elements of <em>G</em> without repetition.
+There&rsquo;s also a way to return random _g from <em>G</em> by picking random transversals.</p>
+</blockquote>
+<ul>
+<li>How to compute right transversal?</li>
+<li>How to compute stabilizer subgroup?</li>
+</ul>
+<p>&hellip; TO DO: continue description</p>
 <p>Here&rsquo;s my modified Python version of this algorithm based on the code from internet article and Charles Sims survey.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>def <span style="color:#a6e22e">BuildSchreierTree</span>(i, S, orbit)<span style="color:#f92672">:</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> g in S:
@@ -150,7 +175,8 @@ Start from identity permutation and explore group as graph:</p>
 </span></span><span style="display:flex;"><span>        group_order, i <span style="color:#f92672">=</span> group_order <span style="color:#f92672">*</span> len(R), i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span> 
 </span></span><span style="display:flex;"><span>        
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ans, group_order
-</span></span></code></pre></div><h2 id="instead-of-conclusion">Instead of conclusion <a href="#instead-of-conclusion" class="anchor">🔗</a></h2><p>Recently, I came across this nice way to represent Rubick&rsquo;s cubes as planar graphs.
+</span></span></code></pre></div><p>You can find full code <a href="https://github.com/mihael-tunik/train/tree/master/PermutationGroups" target="_blank" rel="noopener">here</a>.</p>
+<h2 id="instead-of-conclusion">Instead of conclusion <a href="#instead-of-conclusion" class="anchor">🔗</a></h2><p>Recently, I came across this nice way to represent Rubick&rsquo;s cubes as planar graphs.
 <p class="markdown-image">
   <img src="/images/cube2x2_id.svg" alt="cube2x2_id"  />
 </p>
@@ -177,7 +203,7 @@ Let&rsquo;s check our algorithm:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> R, group_order <span style="color:#f92672">=</span> SchreierSims(generators)
 </span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> print(group_order)
 </span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#ae81ff">88179840</span>
-</span></span></code></pre></div><p>This number coincides with known results.</p>
+</span></span></code></pre></div><p>This number coincides with known <a href="https://oeis.org/A054434" target="_blank" rel="noopener">results</a>.</p>
     </div>
         <div class="tags">
                 <a href="http://mihael-tunik.github.io/tags/algorithms">algorithms</a>

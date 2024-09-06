@@ -11,7 +11,7 @@ This problem is actually a particular case of more general zero set problem.
 In marching squares function f acts from R2 → R and zero set problem consists of one equation.
 Algorithm is fairly trivial in its nature: if there&rsquo;s a function sign change on the grid edge then we have a contour inside.
 Can we generalize this approach?">
-<meta name="generator" content="Hugo 0.133.1">
+<meta name="generator" content="Hugo 0.134.1">
 <link rel="stylesheet" href="/css/style.css">
 <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
   </head>
@@ -259,30 +259,30 @@ Such code can be easily parallelized with standard frameworks like OMP or even p
 <h2 id="instead-of-conclusion">Instead of conclusion <a href="#instead-of-conclusion" class="anchor">🔗</a></h2><p>Now we have extended picture of algorithms for zero set computation.
 Moreover, one can view marching algorithms as simplified versions of general simplex labeling.</p>
 <table>
-<thead>
-<tr>
-<th>Signature</th>
-<th>Method</th>
-<th>Manifold type</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>R<sup>2</sup> →  R</td>
-<td>Marching squares</td>
-<td>Curve</td>
-</tr>
-<tr>
-<td>R<sup>3</sup> → R</td>
-<td>Marching cubes</td>
-<td>Surface</td>
-</tr>
-<tr>
-<td>R<sup>n+d</sup> → R<sup>n</sup></td>
-<td><strong>Simplex labeling</strong></td>
-<td>d-Manifold</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">Signature</th>
+          <th style="text-align: left">Method</th>
+          <th style="text-align: left">Manifold type</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">R<sup>2</sup> →  R</td>
+          <td style="text-align: left">Marching squares</td>
+          <td style="text-align: left">Curve</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">R<sup>3</sup> → R</td>
+          <td style="text-align: left">Marching cubes</td>
+          <td style="text-align: left">Surface</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">R<sup>n+d</sup> → R<sup>n</sup></td>
+          <td style="text-align: left"><strong>Simplex labeling</strong></td>
+          <td style="text-align: left">d-Manifold</td>
+      </tr>
+  </tbody>
 </table>
 <p>Full version of the code you can find <a href="https://github.com/mihael-tunik/PLClib/blob/master/lib_src/PLC_lib_vec.cpp" target="_blank" rel="noopener">here</a>.</p>
 <p><a href="https://github.com/mihael-tunik/PLClib" target="_blank" rel="noopener">Repository</a> contains corresponding python package (warning: this version is not well-tested) and where you can find examples and try it by your own.</p>

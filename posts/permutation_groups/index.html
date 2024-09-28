@@ -32,13 +32,13 @@ Let&rsquo;s dive in!">
           ·
         </span>
         <span>
-          1487 words
+          1565 words
         </span>
         <span class="split">
           ·
         </span>
         <span>
-          7 minute read
+          8 minute read
         </span>
     </div>
     <aside class="toc">
@@ -120,9 +120,8 @@ Definition can look like this: <em>Stab(G, q) ≤ G and h(q)=q</em> for every <e
 <li>for subgroup <em>H ≤ G</em> and <em>g ∈ G</em> <em>right</em> coset <em>Hg</em> is set of elements <em>h * g</em> and <em>h ∈ H</em>;</li>
 <li>for subgroup <em>H ≤ G</em> and <em>g ∈ G</em> <em>left</em> coset <em>gH</em> is set of elements <em>g * h</em> and <em>h ∈ H</em>.</li>
 </ul>
-<blockquote>
-<p>In other words cosets define partition of G.</p>
-</blockquote>
+<p>Every <em>g ∈ G</em> is contained in exactly one cose.
+You can think about cosets as about <em>partition</em> of elements of <em>G</em>.</p>
 <p>And probably the most tricky thing is <em>transversal</em>.
 Let&rsquo;s define it as system of representative elements of each coset of some subgroup <em>H ≤ G</em> (including identity element).</p>
 <blockquote>
@@ -135,22 +134,25 @@ It means that each group in chain <em>G<sub>i</sub></em> should be a subgroup of
 <blockquote>
 <p><em>G = G<sub>0</sub> ≥ G<sub>1</sub> ≥ &hellip; ≥ G<sub>n</sub> = 〈 identity 〉</em>.</p>
 </blockquote>
-<p>Then it can be proved (tricky part) that every element <em>g ∈ G</em> has <em>unique</em> representation as product of right transversals <em>R<sub>i</sub></em> of <em>G<sub>i</sub> ≤ G<sub>i-1</sub></em>:</p>
+<p>Then it can be proved that every element <em>g ∈ G</em> has <em>unique</em> representation as product of right transversals <em>R<sub>i</sub></em> of <em>G<sub>i</sub> ≤ G<sub>i-1</sub></em>:</p>
 <blockquote>
 <p><em>g = r<sub>1</sub> * r<sub>2</sub> &hellip; * r<sub>n</sub></em> for <em>r<sub>1</sub> ∈ R<sub>1</sub>, r<sub>2</sub> ∈ R<sub>2</sub>, &hellip;, r<sub>n</sub> ∈ R<sub>n</sub>.</em></p>
 </blockquote>
-<p>The order of <em>G</em> therefore is the product of <em>|R<sub>i</sub>|</em>.</p>
+<p>Start from observation that for subgroup <em>H ≤ G</em>, cosets partition and chosen transversals it is true that
+every <em>g ∈ G</em> can be uniquely expressed as <em>g = t<sub>Hg</sub> h</em>. Repeat same reasoning for subgroup of <em>H</em>.</p>
+<p>Why do we need exactly <em>stabilizer subgroups</em> in our chain? Because in such a case we can use Schreier lemma.</p>
+<p>Ok, now it is easy to see that the order of <em>G</em> is the product of <em>|R<sub>i</sub>|</em>.</p>
 <blockquote>
 <p>By iterating through every <em>R<sub>i</sub></em> it&rsquo;s easy to list elements of <em>G</em> without repetition.
 There&rsquo;s also a way to return random <em>g ∈ G</em> by picking transversals randomly.</p>
 </blockquote>
-<p>Let&rsquo;s get back to stabilizer chain.</p>
+<p>Let&rsquo;s get back to stabilizer chain and technical details.</p>
 <ul>
 <li>How to compute transversals?</li>
 </ul>
 <p>First we need to answer a question:
 if we have a stabilizer <em>G<sub>u</sub></em> what is the structure of cosets <em>G<sub>u</sub> ≤ G</em>?</p>
-<p>It&rsquo;s not hard to see that different cosets correspond to different mappings <em>u ∈ Q</em> to <em>v ∈ Q</em> possible for group <em>G</em>.
+<p>The answer is that different cosets correspond to different mappings <em>u ∈ Q</em> to <em>v ∈ Q</em> possible for group <em>G</em>.
 For example coset containing elements of <em>G<sub>u</sub></em> will contain mapping from <em>u</em> to <em>u</em>.
 Therefore there&rsquo;s natural bijection between point orbit elements and cosets.
 This is enough to compute every transversal. For given generator set compute set of permutations for every possible mapping.

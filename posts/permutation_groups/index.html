@@ -1,10 +1,14 @@
-<!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <title>Permutation groups | mini-blog</title>
-    <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">    
-<meta name="viewport" content="width=device-width,minimum-scale=1">
+<!doctype html>
+<html lang="en">
+    <head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content='text/html; charset=utf-8' http-equiv='content-type' />
+<meta name="generator" content="Hugo 0.136.3">
+
+
+
+<link href="http://mihael-tunik.github.io/css/styles.css" rel="stylesheet">
+<title>MT mini-blog</title>
 <meta name="description" content="In mathematics, when you change the order of elements in some collection it is called a permutation.
 You can &ldquo;multiply&rdquo; permutations by taking their composition and for given permutation you can always find inverse one which simply reverses its action.
 And also we can imagine identity permutation which does nothing with order of elements.
@@ -12,61 +16,109 @@ This means permutations can form a very special algebraic structures, groups (re
 Such permutation groups has been studied a lot and there&rsquo;s a whole world of algorithms around them.
 In this article we&rsquo;ll look at Sims-Schreier algorithm in context of group order computation and in the end I&rsquo;ll show a fun way to represent Rubick&rsquo;s cube.
 Let&rsquo;s dive in!">
-<meta name="generator" content="Hugo 0.135.0">
-<link rel="stylesheet" href="/css/style.css">
-<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
-  </head>
-  <body>
-    <nav class="navigation">
-		<a href="/"> <span class="arrow">←</span>Home</a>
-	<a href="/posts">Archive</a>
-	<a href="/tags">Tags</a>
-	<a href="/about">About</a>
-</nav>
-    <main class="main">
-<section id="single">
-    <h1 class="title">Permutation groups</h1>
-    <div class="tip">
-        <time datetime="2024-08-16 00:00:00 &#43;0000 UTC">Aug 16, 2024</time>
-        <span class="split">
-          ·
-        </span>
-        <span>
-          1644 words
-        </span>
-        <span class="split">
-          ·
-        </span>
-        <span>
-          8 minute read
-        </span>
-    </div>
-    <aside class="toc">
-      <details>
-          <summary>Table of Contents
-          </summary>
-          <div>
-              <nav id="TableOfContents">
-  <ul>
-    <li><a href="#introduction">Introduction</a></li>
-    <li><a href="#group-order">Group order</a></li>
-    <li><a href="#basic-definitions">Basic definitions</a></li>
-    <li><a href="#sims-schreier-algorithm">Sims-Schreier algorithm</a></li>
-    <li><a href="#instead-of-conclusion">Instead of conclusion</a></li>
-  </ul>
-</nav>
+<meta name="author" content="">
+
+
+<meta property="og:description" content="In mathematics, when you change the order of elements in some collection it is called a permutation.
+You can &ldquo;multiply&rdquo; permutations by taking their composition and for given permutation you can always find inverse one which simply reverses its action.
+And also we can imagine identity permutation which does nothing with order of elements.
+This means permutations can form a very special algebraic structures, groups (remember, compositions are associative).
+Such permutation groups has been studied a lot and there&rsquo;s a whole world of algorithms around them.
+In this article we&rsquo;ll look at Sims-Schreier algorithm in context of group order computation and in the end I&rsquo;ll show a fun way to represent Rubick&rsquo;s cube.
+Let&rsquo;s dive in!" />
+
+
+
+
+
+
+
+<meta name="twitter:description" content="In mathematics, when you change the order of elements in some collection it is called a permutation.
+You can &ldquo;multiply&rdquo; permutations by taking their composition and for given permutation you can always find inverse one which simply reverses its action.
+And also we can imagine identity permutation which does nothing with order of elements.
+This means permutations can form a very special algebraic structures, groups (remember, compositions are associative).
+Such permutation groups has been studied a lot and there&rsquo;s a whole world of algorithms around them.
+In this article we&rsquo;ll look at Sims-Schreier algorithm in context of group order computation and in the end I&rsquo;ll show a fun way to represent Rubick&rsquo;s cube.
+Let&rsquo;s dive in!">
+
+
+</head>
+    <body>
+        <div class="content">
+            <nav class="blog-navigation">
+  <div class="left">
+      <div class="blog-logo">
+        <a href='/' title="MT mini-blog">
+          <img src="http://mihael-tunik.github.io/img/logo.svg" alt="MT mini-blog">
+        </a>
+      </div>
+      <div class="blog-info">
+          <div class="blog-title">
+            <a href='/' title="MT mini-blog">
+              <h1>MT mini-blog</h1>
+            </a>
           </div>
-      </details>
-    </aside>
-    <div class="content">
-      <p>In mathematics, when you change the order of elements in some collection it is called a permutation.
+          <div class="blog-description">
+            <a href='/' title="MT mini-blog">
+              <h2>Things around computer science</h2>
+            </a>
+          </div>
+      </div>
+  </div>
+  <div class="right">
+    <div class="blog-links">
+      <ul class="links">
+          <li class="item social"><a href='https://github.com/mihael-tunik' title="Github" target="_blank">Github</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="single">
+    <article>
+        <div class="article-meta">
+    <ul class="article-info">
+        <li class="time" style="">
+            <time class="time">16 Aug 2024</time>
+        </li>
+        <li class="reading-time" style="">
+            <span class="material-icons">timer</span>8 min read
+        </li>
+        <li class="words-count" style="">
+            <span class="material-icons">article</span>1644 words
+        </li>
+    </ul>
+    <ul class="article-tags" style="">
+                <li>
+                    <a href='/tags/algorithms'>#algorithms</a>
+                </li>
+                <li>
+                    <a href='/tags/mathematics'>#mathematics</a>
+                </li>
+                <li>
+                    <a href='/tags/python'>#python</a>
+                </li>
+                <li>
+                    <a href='/tags/tutorials'>#tutorials</a>
+                </li>
+                <li>
+                    <a href='/tags/hard'>#hard</a>
+                </li>
+    </ul>
+</div>
+        <div class="article-header">
+            <h1 class="article-title">Permutation groups</h1>          
+            <h2 class="article-excerpt"></h2>  
+        </div>
+        <div class="article-content">
+            <p>In mathematics, when you change the order of elements in some collection it is called a permutation.
 You can &ldquo;multiply&rdquo; permutations by taking their composition and for given permutation you can always find inverse one which simply reverses its action.
 And also we can imagine identity permutation which does nothing with order of elements.
 This means permutations can form a very special algebraic structures, groups (remember, compositions are associative).
 Such permutation groups has been studied a lot and there&rsquo;s a whole world of algorithms around them.
 In this article we&rsquo;ll look at Sims-Schreier algorithm in context of group order computation and in the end I&rsquo;ll show a fun way to represent Rubick&rsquo;s cube.
 Let&rsquo;s dive in!</p>
-<h2 id="introduction">Introduction <a href="#introduction" class="anchor">🔗</a></h2><p>First let&rsquo;s define basic operations with permutations.
+<h2 id="introduction">Introduction</h2>
+<p>First let&rsquo;s define basic operations with permutations.
 Permutations are stored coordinatewise:
 <em>x({1, &hellip;, n}) = {x<sub>1</sub>(1), &hellip;, x<sub>n</sub>(n)}</em>.
 With multiplication let&rsquo;s follow rightmost first notation, which means that it&rsquo;s viewed as composition from right to left.</p>
@@ -75,22 +127,23 @@ With multiplication let&rsquo;s follow rightmost first notation, which means tha
 Then inverse is defined as permutation <em>x<sub>inv</sub></em> such as <em>x(x<sub>inv</sub>(Q)) = Q</em> or <em>x * x<sub>inv</sub> = identity</em>.</p>
 </blockquote>
 <p>Here&rsquo;s the code:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>def mult(<span style="color:#f92672">*</span>p_chain)<span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>    res <span style="color:#f92672">=</span> []
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i in range(<span style="color:#ae81ff">0</span>, len(p_chain[<span style="color:#ae81ff">0</span>]))<span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>        image <span style="color:#f92672">=</span> i
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># x o y = x(y(S)), rightmost first
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">for</span> p in reversed(p_chain)<span style="color:#f92672">:</span> 
-</span></span><span style="display:flex;"><span>            image <span style="color:#f92672">=</span> p[image] <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span> 
-</span></span><span style="display:flex;"><span>        res.append(image <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>)
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> tuple(res)
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#000">def</span> <span style="color:#000">mult</span><span style="color:#000;font-weight:bold">(</span><span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">p_chain</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">res</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">[]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">for</span> <span style="color:#000">i</span> <span style="color:#000">in</span> <span style="color:#000">range</span><span style="color:#000;font-weight:bold">(</span><span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">len</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">p_chain</span><span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">]))</span><span style="color:#ce5c00;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">image</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">i</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8f5902;font-style:italic"># x o y = x(y(S)), rightmost first
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"></span>        <span style="color:#204a87;font-weight:bold">for</span> <span style="color:#000">p</span> <span style="color:#000">in</span> <span style="color:#000">reversed</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">p_chain</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span> 
+</span></span><span style="display:flex;"><span>            <span style="color:#000">image</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">p</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">image</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">-</span> <span style="color:#0000cf;font-weight:bold">1</span> 
+</span></span><span style="display:flex;"><span>        <span style="color:#000">res</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">append</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">image</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">tuple</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">res</span><span style="color:#000;font-weight:bold">)</span>
 </span></span><span style="display:flex;"><span>        
-</span></span><span style="display:flex;"><span>def inv(x)<span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>    res <span style="color:#f92672">=</span> list(deepcopy(x))
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i in range(<span style="color:#ae81ff">0</span>, len(x))<span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>        res[x[i] <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> tuple(res)
-</span></span></code></pre></div><h2 id="group-order">Group order <a href="#group-order" class="anchor">🔗</a></h2><p>Requirement: before reading this article make sure that you have some basic understanding of group theory: what is <em>group</em>, <em>group operation</em>, <em>subgroup</em>.
+</span></span><span style="display:flex;"><span><span style="color:#000">def</span> <span style="color:#000">inv</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">x</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">res</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">list</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">deepcopy</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">x</span><span style="color:#000;font-weight:bold">))</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">for</span> <span style="color:#000">i</span> <span style="color:#000">in</span> <span style="color:#000">range</span><span style="color:#000;font-weight:bold">(</span><span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">len</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">x</span><span style="color:#000;font-weight:bold">))</span><span style="color:#ce5c00;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">res</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">x</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">i</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">-</span> <span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">i</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#0000cf;font-weight:bold">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">tuple</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">res</span><span style="color:#000;font-weight:bold">)</span>
+</span></span></code></pre></div><h2 id="group-order">Group order</h2>
+<p>Requirement: before reading this article make sure that you have some basic understanding of group theory: what is <em>group</em>, <em>group operation</em>, <em>subgroup</em>.
 I&rsquo;ll give some definitions later, but it may be better to get this knowledge from well-structured learning book about group theory.</p>
 <p>Every set of permutations generate some group, minimal set of permutations which contains starting permutations and closed under multiplication.
 Starting permutations called <em>generators</em>, if <em>G</em> generated by set <em>S</em> it can written as <em>G = 〈 S 〉</em>.</p>
@@ -99,19 +152,20 @@ Starting permutations called <em>generators</em>, if <em>G</em> generated by set
 start from generating set, then multiply permutations with each other and append new elements until new ones will stop to appear.</p>
 </blockquote>
 <p>This can be rewritten as depth-first search. Start from identity permutation and explore group as graph:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>def BuildGroupDfs(p, S, group)<span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> g in S:
-</span></span><span style="display:flex;"><span>        h <span style="color:#f92672">=</span> mult(g, p)
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> h not in group:
-</span></span><span style="display:flex;"><span>            group.add(h)
-</span></span><span style="display:flex;"><span>            BuildGroupDfs(h, S, group)
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#000">def</span> <span style="color:#000">BuildGroupDfs</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">p</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">S</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">group</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">for</span> <span style="color:#000">g</span> <span style="color:#000">in</span> <span style="color:#f57900">S</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">h</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">mult</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">g</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">p</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">if</span> <span style="color:#000">h</span> <span style="color:#000">not</span> <span style="color:#000">in</span> <span style="color:#f57900">group</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000">group</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">add</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">h</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000">BuildGroupDfs</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">h</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">S</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">group</span><span style="color:#000;font-weight:bold">)</span>
 </span></span></code></pre></div><p>Size of group is called <em>group order</em> (written as <em>|G|</em>).
 Often we want to know order of the group generated by some permutations without enumerating its elements
 because in practice resultings groups are often expected to be huge. In such a case Sims-Schreier algorithm comes in handy.</p>
 <blockquote>
 <p>By the way, tree of recursive calls here can degenerate to long chain. Build an example.</p>
 </blockquote>
-<h2 id="basic-definitions">Basic definitions <a href="#basic-definitions" class="anchor">🔗</a></h2><p>Before we start we need to define most fundamental things in group theory.</p>
+<h2 id="basic-definitions">Basic definitions</h2>
+<p>Before we start we need to define most fundamental things in group theory.</p>
 <p>First, group <em>H</em> is called <em>subgroup</em> of the group <em>G</em> if its elements are subset of elements of <em>G</em>, let&rsquo;s write it <em>H ≤ G</em>.</p>
 <p><em>Orbit</em> of element <em>q ∈ Q</em> and group <em>G</em> is subset of Q that for every <em>q<sub>o</sub> ∈ Orb(q)</em> there&rsquo;s <em>g ∈ G: q<sub>o</sub> = g(q)</em>.
 In other words it&rsquo;s just possible positions where <em>G</em> can &ldquo;move&rdquo; our element <em>q</em>.</p>
@@ -131,7 +185,8 @@ Let&rsquo;s define it as system of representative elements of each coset of some
 Sounds simple, but it requires me some time to get it when I was reading about Sims-Schreier first time.</p>
 </blockquote>
 <p>Now we are ready.</p>
-<h2 id="sims-schreier-algorithm">Sims-Schreier algorithm <a href="#sims-schreier-algorithm" class="anchor">🔗</a></h2><p>Main idea of Sims-Schreier algorithm is to decompose our group <em>G</em> into the <em>chain of subgroups</em>.
+<h2 id="sims-schreier-algorithm">Sims-Schreier algorithm</h2>
+<p>Main idea of Sims-Schreier algorithm is to decompose our group <em>G</em> into the <em>chain of subgroups</em>.
 It means that each group in chain <em>G<sub>i</sub></em> should be a subgroup of previous one <em>G<sub>i-1</sub></em>:</p>
 <blockquote>
 <p><em>G = G<sub>0</sub> ≥ G<sub>1</sub> ≥ &hellip; ≥ G<sub>n</sub> = 〈 identity 〉</em>.</p>
@@ -160,11 +215,11 @@ For example coset containing elements of <em>G<sub>u</sub></em> will contain map
 Therefore there&rsquo;s natural bijection between point orbit elements and cosets.
 This is enough to compute every transversal. For given generator set compute set of permutations for every possible mapping.
 This can be made in dfs-like fashion and corresponding tree is called <em>Schreier Tree</em>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>def BuildSchreierTree(i, S, orbit)<span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> g in S:
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> g[i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>] not in orbit:
-</span></span><span style="display:flex;"><span>            orbit[g[i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]] <span style="color:#f92672">=</span> mult(g, orbit[i])
-</span></span><span style="display:flex;"><span>            BuildSchreierTree(g[i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>], S, orbit)
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#000">def</span> <span style="color:#000">BuildSchreierTree</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">i</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">S</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">orbit</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">for</span> <span style="color:#000">g</span> <span style="color:#000">in</span> <span style="color:#f57900">S</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">if</span> <span style="color:#000">g</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">i</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#000">not</span> <span style="color:#000">in</span> <span style="color:#f57900">orbit</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000">orbit</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">g</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">i</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">]]</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">mult</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">g</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">orbit</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">i</span><span style="color:#000;font-weight:bold">])</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000">BuildSchreierTree</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">g</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">i</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">],</span> <span style="color:#000">S</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">orbit</span><span style="color:#000;font-weight:bold">)</span>
 </span></span></code></pre></div><ul>
 <li>How to compute stabilizer subgroup?
 Use <em>Schreier lemma</em> to compute generators of subgroups.</li>
@@ -177,77 +232,70 @@ Then stabilizer subgroup <em>G<sub>u</sub></em> is generated by the following se
 <blockquote>
 <p>Note: <em>r<sub>s(p)</sub><sup>-1</sup> s r<sub>p</sub></em> in <em>rightmost-first</em> notation, compare with standard <em>r<sub>p</sub> s r<sub>s(p)</sub><sup>-1</sup></em> in <em>leftmost-first</em> notation.</p>
 </blockquote>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>            
-</span></span><span style="display:flex;"><span>def BuildSchreierGenerators(S, orbit)<span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>    S_gen <span style="color:#f92672">=</span> set()
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> g in S:
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> u in orbit:
-</span></span><span style="display:flex;"><span>            schreier_generator <span style="color:#f92672">=</span> mult(inv(orbit[g[u<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]]), g, orbit[u])
-</span></span><span style="display:flex;"><span>            S_gen.add(schreier_generator) 
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> S_gen
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span><span style="color:#000">def</span> <span style="color:#000">BuildSchreierGenerators</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">S</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">orbit</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">S_gen</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">set</span><span style="color:#000;font-weight:bold">()</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">for</span> <span style="color:#000">g</span> <span style="color:#000">in</span> <span style="color:#f57900">S</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">for</span> <span style="color:#000">u</span> <span style="color:#000">in</span> <span style="color:#f57900">orbit</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000">schreier_generator</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">mult</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">inv</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">orbit</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">g</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">u</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">]]),</span> <span style="color:#000">g</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">orbit</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">u</span><span style="color:#000;font-weight:bold">])</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000">S_gen</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">add</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">schreier_generator</span><span style="color:#000;font-weight:bold">)</span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">S_gen</span>
 </span></span></code></pre></div><p>After orbit is computed and generators are found this new generator set can be much larger then previous one.
 At the same time many of Schreier generators often turns out to be redundant, that means there exists smaller set of generators for the same group.
 This will cause unnecessary combinatorial growth unless new set will be filtered by some procedure.</p>
 <p>Sims filter is the best option here, it guarantees resulting set to be O(|Q|<sup>2</sup>) in size. Main idea of this algorithm to construct
 generating set including only one permutation for every pair <em>(i, j)</em> which maps <em>i</em> to <em>j</em> in Gauss-elimination style.</p>
 <p>Here&rsquo;s my modified Python version of this algorithm based on the code from internet article and Charles Sims survey.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>            
-</span></span><span style="display:flex;"><span>def <span style="color:#a6e22e">SimsFilter</span>(S, n)<span style="color:#f92672">:</span>    
-</span></span><span style="display:flex;"><span>    u <span style="color:#f92672">=</span> [[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">*</span>n] <span style="color:#f92672">*</span> n 
-</span></span><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">#</span> only <span style="color:#66d9ef">for</span> j <span style="color:#f92672">&gt;</span> i
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span><span style="color:#000">def</span> <span style="color:#000">SimsFilter</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">S</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">n</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000">u</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">[[</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">]</span><span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">n</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">*</span> <span style="color:#000">n</span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#a40000">#</span> <span style="color:#000">only</span> <span style="color:#204a87;font-weight:bold">for</span> <span style="color:#000">j</span> <span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#000">i</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> g in S:
-</span></span><span style="display:flex;"><span>        h <span style="color:#f92672">=</span> g        
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> i in range(<span style="color:#ae81ff">1</span>, n<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>            j <span style="color:#f92672">=</span> h[i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> j <span style="color:#f92672">&gt;</span> i:
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> u[i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>][j<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>                    u[i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>][j<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> h
-</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">break</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">else</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>                    h <span style="color:#f92672">=</span> mult(inv(u[i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>][j<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]), h)
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">for</span> <span style="color:#000">g</span> <span style="color:#000">in</span> <span style="color:#f57900">S</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">h</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">g</span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">for</span> <span style="color:#000">i</span> <span style="color:#000">in</span> <span style="color:#000">range</span><span style="color:#000;font-weight:bold">(</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">n</span><span style="color:#ce5c00;font-weight:bold">+</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000">j</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">h</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">i</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#204a87;font-weight:bold">if</span> <span style="color:#000">j</span> <span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#f57900">i</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#204a87;font-weight:bold">if</span> <span style="color:#000">u</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">i</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">][</span><span style="color:#000">j</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">==</span> <span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#ce5c00;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#000">u</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">i</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">][</span><span style="color:#000">j</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">h</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#204a87;font-weight:bold">break</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#204a87;font-weight:bold">else</span><span style="color:#ce5c00;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#000">h</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">mult</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">inv</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">u</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">i</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">][</span><span style="color:#000">j</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">]),</span> <span style="color:#000">h</span><span style="color:#000;font-weight:bold">)</span>
 </span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    S_reduced <span style="color:#f92672">=</span> set()
+</span></span><span style="display:flex;"><span>    <span style="color:#000">S_reduced</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">set</span><span style="color:#000;font-weight:bold">()</span>
 </span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i in range(<span style="color:#ae81ff">0</span>, n)<span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> j in range(<span style="color:#ae81ff">0</span>, n)<span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> u[i][j] <span style="color:#f92672">!=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>                S_reduced.add(u[i][j])
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">for</span> <span style="color:#000">i</span> <span style="color:#000">in</span> <span style="color:#000">range</span><span style="color:#000;font-weight:bold">(</span><span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">n</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">for</span> <span style="color:#000">j</span> <span style="color:#000">in</span> <span style="color:#000">range</span><span style="color:#000;font-weight:bold">(</span><span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">n</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#204a87;font-weight:bold">if</span> <span style="color:#000">u</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">i</span><span style="color:#000;font-weight:bold">][</span><span style="color:#000">j</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">!=</span> <span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#ce5c00;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#000">S_reduced</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">add</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">u</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">i</span><span style="color:#000;font-weight:bold">][</span><span style="color:#000">j</span><span style="color:#000;font-weight:bold">])</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> S_reduced
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">S_reduced</span>
 </span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>def SchreierSims(S)<span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>    n <span style="color:#f92672">=</span> len(S[<span style="color:#ae81ff">0</span>])    
-</span></span><span style="display:flex;"><span>    ans, group_order, i <span style="color:#f92672">=</span> [], <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">def</span> <span style="color:#000">SchreierSims</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">S</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">n</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">len</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">S</span><span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">])</span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000">ans</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">group_order</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">i</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">[],</span> <span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">1</span>
 </span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> len(S) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span> and i <span style="color:#f92672">&lt;=</span> n:
-</span></span><span style="display:flex;"><span>        orbit <span style="color:#f92672">=</span> {i : tuple(range(<span style="color:#ae81ff">1</span>, n<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>))}
-</span></span><span style="display:flex;"><span>        BuildSchreierTree(i, S, orbit)
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">while</span> <span style="color:#000">len</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">S</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">!=</span> <span style="color:#0000cf;font-weight:bold">0</span> <span style="color:#000">and</span> <span style="color:#000">i</span> <span style="color:#ce5c00;font-weight:bold">&lt;=</span> <span style="color:#f57900">n</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">orbit</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">{</span><span style="color:#f57900">i</span> <span style="color:#000;font-weight:bold">:</span> <span style="color:#000">tuple</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">range</span><span style="color:#000;font-weight:bold">(</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">n</span><span style="color:#ce5c00;font-weight:bold">+</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">))}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">BuildSchreierTree</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">i</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">S</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">orbit</span><span style="color:#000;font-weight:bold">)</span>
 </span></span><span style="display:flex;"><span>       
-</span></span><span style="display:flex;"><span>        R <span style="color:#f92672">=</span> [orbit[j] <span style="color:#66d9ef">for</span> j in orbit]
-</span></span><span style="display:flex;"><span>        S <span style="color:#f92672">=</span> SimsFilter(BuildSchreierGenerators(S, orbit), n)
+</span></span><span style="display:flex;"><span>        <span style="color:#000">R</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">[</span><span style="color:#000">orbit</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">j</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#204a87;font-weight:bold">for</span> <span style="color:#000">j</span> <span style="color:#000">in</span> <span style="color:#000">orbit</span><span style="color:#000;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">S</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">SimsFilter</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">BuildSchreierGenerators</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">S</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">orbit</span><span style="color:#000;font-weight:bold">),</span> <span style="color:#000">n</span><span style="color:#000;font-weight:bold">)</span>
 </span></span><span style="display:flex;"><span>        
-</span></span><span style="display:flex;"><span>        ans <span style="color:#f92672">+=</span> [R]
-</span></span><span style="display:flex;"><span>        group_order, i <span style="color:#f92672">=</span> group_order <span style="color:#f92672">*</span> len(R), i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span> 
+</span></span><span style="display:flex;"><span>        <span style="color:#000">ans</span> <span style="color:#ce5c00;font-weight:bold">+=</span> <span style="color:#000;font-weight:bold">[</span><span style="color:#000">R</span><span style="color:#000;font-weight:bold">]</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">group_order</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">i</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">group_order</span> <span style="color:#ce5c00;font-weight:bold">*</span> <span style="color:#000">len</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">R</span><span style="color:#000;font-weight:bold">),</span> <span style="color:#000">i</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#0000cf;font-weight:bold">1</span> 
 </span></span><span style="display:flex;"><span>        
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ans, group_order
-</span></span></code></pre></div><p>You can find full code <a href="https://github.com/mihael-tunik/train/tree/master/PermutationGroups" target="_blank" rel="noopener">here</a>.</p>
-<h2 id="instead-of-conclusion">Instead of conclusion <a href="#instead-of-conclusion" class="anchor">🔗</a></h2><p>Recently, I came across this nice way to represent Rubick&rsquo;s cubes as planar graphs (left on the picture and cube net is shown for comparison).
-<p class="markdown-image">
-  <img src="/images/cube2x2_id.svg" alt="cube2x2_id"  />
-</p>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">ans</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">group_order</span>
+</span></span></code></pre></div><p>You can find full code <a href="https://github.com/mihael-tunik/train/tree/master/PermutationGroups">here</a>.</p>
+<h2 id="instead-of-conclusion">Instead of conclusion</h2>
+<p>Recently, I came across this nice way to represent Rubick&rsquo;s cubes as planar graphs (left on the picture and cube net is shown for comparison).
+<img src="/images/cube2x2_id.svg" alt="cube2x2_id">
 This representation is very helpful for understanding which permutations are equivalent to cube rotations.
 For this scheme there&rsquo;s two types of possible rotations. First, there&rsquo;s <em>inner rotation</em>, example:
-<p class="markdown-image">
-  <img src="/images/cube2x2_r1.svg" alt="cube2x2_r1"  />
-</p>
-<p class="markdown-image">
-  <img src="/images/cube2x2_r3.svg" alt="cube2x2_r3"  />
-</p>
+<img src="/images/cube2x2_r1.svg" alt="cube2x2_r1">
+<img src="/images/cube2x2_r3.svg" alt="cube2x2_r3">
 And ther&rsquo;s <em>outer rotation</em>:
-<p class="markdown-image">
-  <img src="/images/cube2x2_r2.svg" alt="cube2x2_r2"  />
-</p>
+<img src="/images/cube2x2_r2.svg" alt="cube2x2_r2">
 However all cube rotations are symmetrical to each other and there&rsquo;s no different types for them.
 And so inner and outer rotations are coincide up to graph vertices enumeration.</p>
 <p>It&rsquo;s easy to see that corresponding to pictures generating permutations are</p>
@@ -256,47 +304,16 @@ And so inner and outer rotations are coincide up to graph vertices enumeration.<
  [22, 2 , 3, 4 , 5 , 16, 21, 8 , 9 , 10, 11, 15, 13, 14, 1 , 7 , 19, 17, 20, 18, 6 , 12, 23, 24]]
 </code></pre><p>For 2x2 version of Rubick&rsquo;s cube they are enough to generate whole permutation group.
 Let&rsquo;s check our algorithm:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> R, group_order <span style="color:#f92672">=</span> SchreierSims(generators)
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> print(group_order)
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#ae81ff">88179840</span>
-</span></span></code></pre></div><p>This number coincides with known <a href="https://oeis.org/A054434" target="_blank" rel="noopener">results</a>.</p>
-    </div>
-        <div class="tags">
-                <a href="http://mihael-tunik.github.io/tags/algorithms">algorithms</a>
-                <a href="http://mihael-tunik.github.io/tags/mathematics">mathematics</a>
-                <a href="http://mihael-tunik.github.io/tags/python">python</a>
-                <a href="http://mihael-tunik.github.io/tags/tutorials">tutorials</a>
-                <a href="http://mihael-tunik.github.io/tags/hard">hard</a>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">&gt;&gt;&gt;</span> <span style="color:#000">R</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">group_order</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">SchreierSims</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">generators</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">&gt;&gt;&gt;</span> <span style="color:#000">print</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">group_order</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ce5c00;font-weight:bold">&gt;&gt;&gt;</span> <span style="color:#0000cf;font-weight:bold">88179840</span>
+</span></span></code></pre></div><p>This number coincides with known <a href="https://oeis.org/A054434">results</a>.</p>
         </div>
-</section>
-    </main>
-    <footer id="footer">
-        <div id="social">
-    <a class="symbol" href="https://github.com/mihael-tunik" rel="me" target="_blank">
-        <svg fill="#bbbbbb" width="28" height="28"  viewBox="0 0 72 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>Github</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Social-Icons---Rounded-Black" transform="translate(-264.000000, -939.000000)">
-            <g id="Github" transform="translate(264.000000, 939.000000)">
-                <path d="M8,72 L64,72 C68.418278,72 72,68.418278 72,64 L72,8 C72,3.581722 68.418278,-8.11624501e-16 64,0 L8,0 C3.581722,8.11624501e-16 -5.41083001e-16,3.581722 0,8 L0,64 C5.41083001e-16,68.418278 3.581722,72 8,72 Z" id="Rounded" fill="#bbbbbb"></path>
-                <path d="M35.9985,13 C22.746,13 12,23.7870921 12,37.096644 C12,47.7406712 18.876,56.7718301 28.4145,59.9584121 C29.6145,60.1797862 30.0525,59.4358488 30.0525,58.7973276 C30.0525,58.2250681 30.0315,56.7100863 30.0195,54.6996482 C23.343,56.1558981 21.9345,51.4693938 21.9345,51.4693938 C20.844,48.6864054 19.2705,47.9454799 19.2705,47.9454799 C17.091,46.4500754 19.4355,46.4801943 19.4355,46.4801943 C21.843,46.6503662 23.1105,48.9634994 23.1105,48.9634994 C25.2525,52.6455377 28.728,51.5823398 30.096,50.9649018 C30.3135,49.4077535 30.9345,48.3460615 31.62,47.7436831 C26.2905,47.1352808 20.688,45.0691228 20.688,35.8361671 C20.688,33.2052792 21.6225,31.0547881 23.1585,29.3696344 C22.911,28.7597262 22.0875,26.3110578 23.3925,22.9934585 C23.3925,22.9934585 25.4085,22.3459017 29.9925,25.4632101 C31.908,24.9285993 33.96,24.6620468 36.0015,24.6515052 C38.04,24.6620468 40.0935,24.9285993 42.0105,25.4632101 C46.5915,22.3459017 48.603,22.9934585 48.603,22.9934585 C49.9125,26.3110578 49.089,28.7597262 48.8415,29.3696344 C50.3805,31.0547881 51.309,33.2052792 51.309,35.8361671 C51.309,45.0917119 45.6975,47.1292571 40.3515,47.7256117 C41.2125,48.4695491 41.9805,49.9393525 41.9805,52.1877301 C41.9805,55.4089489 41.9505,58.0067059 41.9505,58.7973276 C41.9505,59.4418726 42.3825,60.1918338 43.6005,59.9554002 C53.13,56.7627944 60,47.7376593 60,37.096644 C60,23.7870921 49.254,13 35.9985,13" fill="#FFFFFF"></path>
-            </g>
-        </g>
-    </g>
-</svg>
-    </a>
+    </article>
 </div>
-    <div class="copyright">
-       © Copyright 
-       2024 
-       <span class="split">
-        <svg fill="#bbbbbb" width="15" height="15" version="1.1" id="heart-15" xmlns="http://www.w3.org/2000/svg" width="15px" height="15px" viewBox="0 0 15 15">
-  
-</svg>
-       </span>
-    </div>
+            <footer class="footer">    
+    <p>⚡️ Blog powered by <a href="https://gohugo.io/" target="_blank">Hugo</a>. Using <a href="https://github.com/sergiobarriel/tophat-theme" target="_blank">Top Hat</a> theme.</p>
 </footer>
-  </body>
+        </div>
+    </body>
 </html>

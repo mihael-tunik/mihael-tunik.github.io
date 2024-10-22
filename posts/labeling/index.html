@@ -1,64 +1,107 @@
-<!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <title>Integer labeling for zero set estimation | mini-blog</title>
-    <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">    
-<meta name="viewport" content="width=device-width,minimum-scale=1">
+<!doctype html>
+<html lang="en">
+    <head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content='text/html; charset=utf-8' http-equiv='content-type' />
+<meta name="generator" content="Hugo 0.136.3">
+
+
+
+<link href="http://mihael-tunik.github.io/css/styles.css" rel="stylesheet">
+<title>MT mini-blog</title>
 <meta name="description" content="Everybody knows about marching squares or cubes.
 These methods are typically used for contour line/surface computation.
 This problem is actually a particular case of more general zero set problem.
 In marching squares function f acts from R2 → R and zero set problem consists of one equation.
 Algorithm is fairly trivial in its nature: if there&rsquo;s a function sign change on the grid edge then we have a contour inside.
 Can we generalize this approach?">
-<meta name="generator" content="Hugo 0.135.0">
-<link rel="stylesheet" href="/css/style.css">
-<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
-  </head>
-  <body>
-    <nav class="navigation">
-		<a href="/"> <span class="arrow">←</span>Home</a>
-	<a href="/posts">Archive</a>
-	<a href="/tags">Tags</a>
-	<a href="/about">About</a>
-</nav>
-    <main class="main">
-<section id="single">
-    <h1 class="title">Integer labeling for zero set estimation</h1>
-    <div class="tip">
-        <time datetime="2024-06-19 00:00:00 &#43;0000 UTC">Jun 19, 2024</time>
-        <span class="split">
-          ·
-        </span>
-        <span>
-          1412 words
-        </span>
-        <span class="split">
-          ·
-        </span>
-        <span>
-          7 minute read
-        </span>
-    </div>
-    <aside class="toc">
-      <details>
-          <summary>Table of Contents
-          </summary>
-          <div>
-              <nav id="TableOfContents">
-  <ul>
-    <li><a href="#zero-set-problem">Zero set problem</a></li>
-    <li><a href="#labeling-methods">Labeling methods</a></li>
-    <li><a href="#code">Code</a></li>
-    <li><a href="#details">Details</a></li>
-    <li><a href="#instead-of-conclusion">Instead of conclusion</a></li>
-  </ul>
-</nav>
+<meta name="author" content="">
+
+
+<meta property="og:description" content="Everybody knows about marching squares or cubes.
+These methods are typically used for contour line/surface computation.
+This problem is actually a particular case of more general zero set problem.
+In marching squares function f acts from R2 → R and zero set problem consists of one equation.
+Algorithm is fairly trivial in its nature: if there&rsquo;s a function sign change on the grid edge then we have a contour inside.
+Can we generalize this approach?" />
+
+
+
+
+
+
+
+<meta name="twitter:description" content="Everybody knows about marching squares or cubes.
+These methods are typically used for contour line/surface computation.
+This problem is actually a particular case of more general zero set problem.
+In marching squares function f acts from R2 → R and zero set problem consists of one equation.
+Algorithm is fairly trivial in its nature: if there&rsquo;s a function sign change on the grid edge then we have a contour inside.
+Can we generalize this approach?">
+
+
+</head>
+    <body>
+        <div class="content">
+            <nav class="blog-navigation">
+  <div class="left">
+      <div class="blog-logo">
+        <a href='/' title="MT mini-blog">
+          <img src="http://mihael-tunik.github.io/img/logo.svg" alt="MT mini-blog">
+        </a>
+      </div>
+      <div class="blog-info">
+          <div class="blog-title">
+            <a href='/' title="MT mini-blog">
+              <h1>MT mini-blog</h1>
+            </a>
           </div>
-      </details>
-    </aside>
-    <div class="content">
-      <p>Everybody knows about marching squares or cubes.
+          <div class="blog-description">
+            <a href='/' title="MT mini-blog">
+              <h2>Things around computer science</h2>
+            </a>
+          </div>
+      </div>
+  </div>
+  <div class="right">
+    <div class="blog-links">
+      <ul class="links">
+          <li class="item social"><a href='https://github.com/mihael-tunik' title="Github" target="_blank">Github</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="single">
+    <article>
+        <div class="article-meta">
+    <ul class="article-info">
+        <li class="time" style="">
+            <time class="time">19 Jun 2024</time>
+        </li>
+        <li class="reading-time" style="">
+            <span class="material-icons">timer</span>7 min read
+        </li>
+        <li class="words-count" style="">
+            <span class="material-icons">article</span>1412 words
+        </li>
+    </ul>
+    <ul class="article-tags" style="">
+                <li>
+                    <a href='/tags/algorithms'>#algorithms</a>
+                </li>
+                <li>
+                    <a href='/tags/easy'>#easy</a>
+                </li>
+                <li>
+                    <a href='/tags/cpp'>#cpp</a>
+                </li>
+    </ul>
+</div>
+        <div class="article-header">
+            <h1 class="article-title">Integer labeling for zero set estimation</h1>          
+            <h2 class="article-excerpt"></h2>  
+        </div>
+        <div class="article-content">
+            <p>Everybody knows about marching squares or cubes.
 These methods are typically used for contour line/surface computation.
 This problem is actually a particular case of more general <strong>zero set problem</strong>.
 In marching squares function f acts from R<sup>2</sup> → R and zero set problem consists of one equation.
@@ -66,17 +109,17 @@ Algorithm is fairly trivial in its nature: <em>if there&rsquo;s a function sign 
 Can we generalize this approach?</p>
 <p>What if f is a <em>vector-function</em> and acts, for example, R<sup>3</sup> → R<sup>2</sup>?
 Surprisingly, there&rsquo;s nice family of algorithms to handle this, called <em>labeling</em> methods.</p>
-<h2 id="zero-set-problem">Zero set problem <a href="#zero-set-problem" class="anchor">🔗</a></h2><p>First, let&rsquo;s define the problem:</p>
+<h2 id="zero-set-problem">Zero set problem</h2>
+<p>First, let&rsquo;s define the problem:</p>
 <blockquote>
 <p>For vector-valued function f: R<sup>n</sup> → R<sup>m</sup> find x values f(x<sub>1</sub>, &hellip;, x<sub>n</sub>) = (0, &hellip;, 0).</p>
 </blockquote>
-<h2 id="labeling-methods">Labeling methods <a href="#labeling-methods" class="anchor">🔗</a></h2><p>Now, let&rsquo;s return to the labeling. So it&rsquo;s <em>labeling algorithms</em> and that means that we have grid/space subdivision and for every vertice of it
+<h2 id="labeling-methods">Labeling methods</h2>
+<p>Now, let&rsquo;s return to the labeling. So it&rsquo;s <em>labeling algorithms</em> and that means that we have grid/space subdivision and for every vertice of it
 we&rsquo;ll compute some <em>label values</em>. Then according to them we can find what grid elements/cells present the zero set of our function.
 Important thing to say is that function f here is approximated by piecewise linear version of itself f<sub>PL</sub>, which is easy to define:
 values on vertices will be the same and linearly interpolated inside the cell.
-<p class="markdown-image">
-  <img src="/images/f_pl_21.svg" alt="MS"  />
-</p> For brevity let&rsquo;s call R<sup>n</sup> → R<sup>m</sup> zero set problems by the tuple (n, m). There&rsquo;s at least two of labeling strategies known:
+<img src="/images/f_pl_21.svg" alt="MS"> For brevity let&rsquo;s call R<sup>n</sup> → R<sup>m</sup> zero set problems by the tuple (n, m). There&rsquo;s at least two of labeling strategies known:
 <strong>integer</strong> and <strong>vector labeling</strong>. We focus on the integer labeling, because it&rsquo;s less obvious and more elegant.</p>
 <p>First, suppose we have simplicial space subdivision. Then, we should define the labeling rule for every vertice.
 For example, according to Introduction to <em>Numerical Continuation Methods</em> by Eugene L. Allgower and Kurt Georg
@@ -91,9 +134,7 @@ then in subdivision <strong>completely labeled simplices and only them contain n
 <p>But why do we need exactly complete labeling in multidimensional case? For now, I didn&rsquo;t found corresponding theorem with proof in strict form.</p>
 <p>However we can gain some intuition by hand-waving explanation and examples.
 On the following picture, there&rsquo;s one example of completely labeled simplex for (3,2)-problem.
-<p class="markdown-image">
-  <img src="/images/completely_labeled_32.svg" alt="Example_32"  />
-</p>
+<img src="/images/completely_labeled_32.svg" alt="Example_32">
 It has four vertices f1, f2, f3, f4 and labelings corresponding to underlying vector-function component signs ({+, -} means f<sub>1</sub> &gt; 0, f<sub>2</sub> &lt; 0).
 Then it&rsquo;s easy to see that there exists a point (0, -) between f1 and f2 and (0, +) between f3 and f4 by linearity of f<sub>PL</sub> approximation.
 So we have one zero point u of f_PL on the line between them.
@@ -108,139 +149,139 @@ there&rsquo;s a <em>door in</em> facet where this chain enters the simplex and <
 Actually, for every (n+1, n)-problem zero set approximation is a polygonal chain in R<sup>n+1</sup>.
 Can the general rule be formulated for <em>door</em> simplices facets?</li>
 </ul>
-<h2 id="code">Code <a href="#code" class="anchor">🔗</a></h2><p>Three years ago in my <a href="https://github.com/mihael-tunik/PLClib" target="_blank" rel="noopener">project</a> I implemented <em>integer labeling</em>.
+<h2 id="code">Code</h2>
+<p>Three years ago in my <a href="https://github.com/mihael-tunik/PLClib">project</a> I implemented <em>integer labeling</em>.
 More precisely, simplified version (3,2)-algorithm for rough estimation of zero sets.</p>
 <p>Let&rsquo;s see what is going on in this code and where magic happens.
 Here&rsquo;s full version (without extra prints) ~120 lines of code:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdlib.h&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;vector&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#define COMPLETELY_LABELED(x) ((x) == 0x7)
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">#include</span> <span style="color:#8f5902;font-style:italic">&lt;stdio.h&gt;</span><span style="color:#8f5902;font-style:italic">
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">#include</span> <span style="color:#8f5902;font-style:italic">&lt;iostream&gt;</span><span style="color:#8f5902;font-style:italic">
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">#include</span> <span style="color:#8f5902;font-style:italic">&lt;stdlib.h&gt;</span><span style="color:#8f5902;font-style:italic">
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">#include</span> <span style="color:#8f5902;font-style:italic">&lt;vector&gt;</span><span style="color:#8f5902;font-style:italic">
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"></span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">#define COMPLETELY_LABELED(x) ((x) == 0x7)
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"></span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">using</span> <span style="color:#204a87;font-weight:bold">namespace</span> <span style="color:#000">std</span><span style="color:#000;font-weight:bold">;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> 
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">int</span> Nxy;
-</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">int</span> Nz;
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">typedef</span> <span style="color:#204a87;font-weight:bold">struct</span> 
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">Nxy</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">Nz</span><span style="color:#000;font-weight:bold">;</span>
 </span></span><span style="display:flex;"><span>   
-</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">double</span> x_min;
-</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">double</span> x_max;
+</span></span><span style="display:flex;"><span>   <span style="color:#204a87;font-weight:bold">double</span> <span style="color:#000">x_min</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#204a87;font-weight:bold">double</span> <span style="color:#000">x_max</span><span style="color:#000;font-weight:bold">;</span>
 </span></span><span style="display:flex;"><span>   
-</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">double</span> y_min;
-</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">double</span> y_max;
+</span></span><span style="display:flex;"><span>   <span style="color:#204a87;font-weight:bold">double</span> <span style="color:#000">y_min</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#204a87;font-weight:bold">double</span> <span style="color:#000">y_max</span><span style="color:#000;font-weight:bold">;</span>
 </span></span><span style="display:flex;"><span>   
-</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">double</span> z_min;
-</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">double</span> z_max;
+</span></span><span style="display:flex;"><span>   <span style="color:#204a87;font-weight:bold">double</span> <span style="color:#000">z_min</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#204a87;font-weight:bold">double</span> <span style="color:#000">z_max</span><span style="color:#000;font-weight:bold">;</span>
 </span></span><span style="display:flex;"><span>   
-</span></span><span style="display:flex;"><span>}grid_t;
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span><span style="color:#000">grid_t</span><span style="color:#000;font-weight:bold">;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> 
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">double</span> data[<span style="color:#ae81ff">2</span>];
-</span></span><span style="display:flex;"><span>}d_pair;
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">typedef</span> <span style="color:#204a87;font-weight:bold">struct</span> 
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">double</span> <span style="color:#000">data</span><span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">2</span><span style="color:#000;font-weight:bold">];</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span><span style="color:#000">d_pair</span><span style="color:#000;font-weight:bold">;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">label_fast</span>(d_pair f_val){ 
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> map[] <span style="color:#f92672">=</span> {<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">4</span>};
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> r <span style="color:#f92672">=</span> ((f_val.data[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">0.0</span>) <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">|</span> (f_val.data[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">0.0</span>);        
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> map[r];
-</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">label_fast</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">d_pair</span> <span style="color:#000">f_val</span><span style="color:#000;font-weight:bold">){</span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">map</span><span style="color:#000;font-weight:bold">[]</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">{</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">2</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">4</span><span style="color:#000;font-weight:bold">};</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">r</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">((</span><span style="color:#000">f_val</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">data</span><span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">&gt;=</span> <span style="color:#0000cf;font-weight:bold">0.0</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">&lt;&lt;</span> <span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">|</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">f_val</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">data</span><span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">&gt;=</span> <span style="color:#0000cf;font-weight:bold">0.0</span><span style="color:#000;font-weight:bold">);</span>        
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">map</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">r</span><span style="color:#000;font-weight:bold">];</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">double</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">f_wrapped_vec</span>(<span style="color:#66d9ef">int</span> N, <span style="color:#66d9ef">double</span> z, <span style="color:#66d9ef">void</span> (<span style="color:#f92672">*</span>ptr)(<span style="color:#66d9ef">int</span>, <span style="color:#66d9ef">double</span>, <span style="color:#66d9ef">double</span> <span style="color:#f92672">*</span>), <span style="color:#66d9ef">double</span> <span style="color:#f92672">*</span>slice_data_ptr){
-</span></span><span style="display:flex;"><span>    (<span style="color:#f92672">*</span>ptr)(N, z, slice_data_ptr);
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> slice_data_ptr;   
-</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">double</span> <span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">f_wrapped_vec</span><span style="color:#000;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">N</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">double</span> <span style="color:#000">z</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">void</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">ptr</span><span style="color:#000;font-weight:bold">)(</span><span style="color:#204a87;font-weight:bold">int</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">double</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">double</span> <span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000;font-weight:bold">),</span> <span style="color:#204a87;font-weight:bold">double</span> <span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">slice_data_ptr</span><span style="color:#000;font-weight:bold">){</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">(</span><span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">ptr</span><span style="color:#000;font-weight:bold">)(</span><span style="color:#000">N</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">z</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">slice_data_ptr</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">slice_data_ptr</span><span style="color:#000;font-weight:bold">;</span>   
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">label_fast_vec</span>(<span style="color:#66d9ef">double</span> <span style="color:#f92672">*</span>slice_data, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>cache, <span style="color:#66d9ef">int</span> size){
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> NN <span style="color:#f92672">=</span> size<span style="color:#f92672">*</span>size;
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">void</span> <span style="color:#000">label_fast_vec</span><span style="color:#000;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">double</span> <span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">slice_data</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">char</span> <span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">cache</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">size</span><span style="color:#000;font-weight:bold">){</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">NN</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">size</span><span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">size</span><span style="color:#000;font-weight:bold">;</span>
 </span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">int</span> l <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; l <span style="color:#f92672">&lt;</span> NN; <span style="color:#f92672">++</span>l){
-</span></span><span style="display:flex;"><span>        d_pair f_val;       
-</span></span><span style="display:flex;"><span>        f_val.data[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> slice_data[l], f_val.data[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> slice_data[NN<span style="color:#f92672">+</span>l]; 
-</span></span><span style="display:flex;"><span>        cache[l] <span style="color:#f92672">=</span> label_fast(f_val);
-</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">for</span><span style="color:#000;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">l</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">;</span> <span style="color:#000">l</span> <span style="color:#ce5c00;font-weight:bold">&lt;</span> <span style="color:#000">NN</span><span style="color:#000;font-weight:bold">;</span> <span style="color:#ce5c00;font-weight:bold">++</span><span style="color:#000">l</span><span style="color:#000;font-weight:bold">){</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">d_pair</span> <span style="color:#000">f_val</span><span style="color:#000;font-weight:bold">;</span>       
+</span></span><span style="display:flex;"><span>        <span style="color:#000">f_val</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">data</span><span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">slice_data</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">l</span><span style="color:#000;font-weight:bold">],</span> <span style="color:#000">f_val</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">data</span><span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">slice_data</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">NN</span><span style="color:#ce5c00;font-weight:bold">+</span><span style="color:#000">l</span><span style="color:#000;font-weight:bold">];</span> 
+</span></span><span style="display:flex;"><span>        <span style="color:#000">cache</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">l</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">label_fast</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">f_val</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
 </span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">extern</span> <span style="color:#e6db74">&#34;C&#34;</span> <span style="color:#66d9ef">int</span> integer_labeling_3d_vec(grid_t GridDesc, <span style="color:#66d9ef">void</span> (<span style="color:#f92672">*</span>ptr)(<span style="color:#66d9ef">int</span>, <span style="color:#66d9ef">double</span>, <span style="color:#66d9ef">double</span> <span style="color:#f92672">*</span>), 
-</span></span><span style="display:flex;"><span>                                   <span style="color:#66d9ef">double</span> <span style="color:#f92672">*</span>result, <span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span>size){
-</span></span><span style="display:flex;"><span>    vector <span style="color:#f92672">&lt;</span><span style="color:#66d9ef">double</span><span style="color:#f92672">&gt;</span> x, y, z;
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">extern</span> <span style="color:#4e9a06">&#34;C&#34;</span> <span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">integer_labeling_3d_vec</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">grid_t</span> <span style="color:#000">GridDesc</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">void</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">ptr</span><span style="color:#000;font-weight:bold">)(</span><span style="color:#204a87;font-weight:bold">int</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">double</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">double</span> <span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000;font-weight:bold">),</span> 
+</span></span><span style="display:flex;"><span>                                   <span style="color:#204a87;font-weight:bold">double</span> <span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">result</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">int</span> <span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">size</span><span style="color:#000;font-weight:bold">){</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">vector</span> <span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">double</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#000">x</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">y</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">z</span><span style="color:#000;font-weight:bold">;</span>
 </span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> N <span style="color:#f92672">=</span> GridDesc.Nxy, Nz <span style="color:#f92672">=</span> GridDesc.Nz;   
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> NN <span style="color:#f92672">=</span> N<span style="color:#f92672">*</span>N, NN_sub <span style="color:#f92672">=</span> (N<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">*</span>(N<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">N</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">GridDesc</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">Nxy</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">Nz</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">GridDesc</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">Nz</span><span style="color:#000;font-weight:bold">;</span>   
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">NN</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">N</span><span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">N</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">NN_sub</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">N</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">N</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">);</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span> <span style="color:#66d9ef">long</span> cnt <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>, iter_cnt <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>, grid_size <span style="color:#f92672">=</span> Nz <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">unsigned</span> <span style="color:#204a87;font-weight:bold">long</span> <span style="color:#204a87;font-weight:bold">long</span> <span style="color:#000">cnt</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">iter_cnt</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">grid_size</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Nz</span> <span style="color:#ce5c00;font-weight:bold">-</span> <span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">;</span>
 </span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>cache_prev <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">char</span>[NN], <span style="color:#f92672">*</span>cache_next <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">char</span>[NN], <span style="color:#f92672">*</span>tmp; 
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">double</span> <span style="color:#f92672">*</span>slice_data_ptr <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">double</span>[<span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>NN];
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">char</span> <span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">cache_prev</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#204a87;font-weight:bold">char</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">NN</span><span style="color:#000;font-weight:bold">],</span> <span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">cache_next</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#204a87;font-weight:bold">char</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">NN</span><span style="color:#000;font-weight:bold">],</span> <span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">tmp</span><span style="color:#000;font-weight:bold">;</span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">double</span> <span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">slice_data_ptr</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#204a87;font-weight:bold">double</span><span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">2</span><span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">NN</span><span style="color:#000;font-weight:bold">];</span>
 </span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    grid_size <span style="color:#f92672">*=</span> NN_sub;
+</span></span><span style="display:flex;"><span>    <span style="color:#000">grid_size</span> <span style="color:#ce5c00;font-weight:bold">*=</span> <span style="color:#000">NN_sub</span><span style="color:#000;font-weight:bold">;</span>
 </span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    x.resize(N), y.resize(N), z.resize(Nz);
+</span></span><span style="display:flex;"><span>    <span style="color:#000">x</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">resize</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">N</span><span style="color:#000;font-weight:bold">),</span> <span style="color:#000">y</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">resize</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">N</span><span style="color:#000;font-weight:bold">),</span> <span style="color:#000">z</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">resize</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">Nz</span><span style="color:#000;font-weight:bold">);</span>
 </span></span><span style="display:flex;"><span>        
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> N; <span style="color:#f92672">++</span>i){
-</span></span><span style="display:flex;"><span>        x[i] <span style="color:#f92672">=</span> GridDesc.x_min <span style="color:#f92672">+</span> (GridDesc.x_max <span style="color:#f92672">-</span> GridDesc.x_min)<span style="color:#f92672">*</span>i<span style="color:#f92672">/</span>(N<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>);
-</span></span><span style="display:flex;"><span>        y[i] <span style="color:#f92672">=</span> GridDesc.y_min <span style="color:#f92672">+</span> (GridDesc.y_max <span style="color:#f92672">-</span> GridDesc.y_min)<span style="color:#f92672">*</span>i<span style="color:#f92672">/</span>(N<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>);
-</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">for</span><span style="color:#000;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">i</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">;</span> <span style="color:#000">i</span> <span style="color:#ce5c00;font-weight:bold">&lt;</span> <span style="color:#000">N</span><span style="color:#000;font-weight:bold">;</span> <span style="color:#ce5c00;font-weight:bold">++</span><span style="color:#000">i</span><span style="color:#000;font-weight:bold">){</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">x</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">i</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">GridDesc</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">x_min</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">GridDesc</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">x_max</span> <span style="color:#ce5c00;font-weight:bold">-</span> <span style="color:#000">GridDesc</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">x_min</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">i</span><span style="color:#ce5c00;font-weight:bold">/</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">N</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">y</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">i</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">GridDesc</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">y_min</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">GridDesc</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">y_max</span> <span style="color:#ce5c00;font-weight:bold">-</span> <span style="color:#000">GridDesc</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">y_min</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">i</span><span style="color:#ce5c00;font-weight:bold">/</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">N</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
 </span></span><span style="display:flex;"><span>        
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> Nz; <span style="color:#f92672">++</span>i){
-</span></span><span style="display:flex;"><span>        z[i] <span style="color:#f92672">=</span> GridDesc.z_min <span style="color:#f92672">+</span> (GridDesc.z_max <span style="color:#f92672">-</span> GridDesc.z_min)<span style="color:#f92672">*</span>i<span style="color:#f92672">/</span>(Nz<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>);
-</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">for</span><span style="color:#000;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">i</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">;</span> <span style="color:#000">i</span> <span style="color:#ce5c00;font-weight:bold">&lt;</span> <span style="color:#000">Nz</span><span style="color:#000;font-weight:bold">;</span> <span style="color:#ce5c00;font-weight:bold">++</span><span style="color:#000">i</span><span style="color:#000;font-weight:bold">){</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">z</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">i</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">GridDesc</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">z_min</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">GridDesc</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">z_max</span> <span style="color:#ce5c00;font-weight:bold">-</span> <span style="color:#000">GridDesc</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">z_min</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">i</span><span style="color:#ce5c00;font-weight:bold">/</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">Nz</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
 </span></span><span style="display:flex;"><span>        
-</span></span><span style="display:flex;"><span>    label_fast_vec(f_wrapped_vec(N, z[<span style="color:#ae81ff">0</span>], ptr, slice_data_ptr), cache_prev, N);
+</span></span><span style="display:flex;"><span>    <span style="color:#000">label_fast_vec</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">f_wrapped_vec</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">N</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">z</span><span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">],</span> <span style="color:#000">ptr</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">slice_data_ptr</span><span style="color:#000;font-weight:bold">),</span> <span style="color:#000">cache_prev</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">N</span><span style="color:#000;font-weight:bold">);</span>
 </span></span><span style="display:flex;"><span>       
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">int</span> k <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; k <span style="color:#f92672">&lt;</span> Nz<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>; <span style="color:#f92672">++</span>k){  
-</span></span><span style="display:flex;"><span>        label_fast_vec(f_wrapped_vec(N, z[k<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>], ptr, slice_data_ptr), cache_next, N);
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">for</span><span style="color:#000;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">k</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">;</span> <span style="color:#000">k</span> <span style="color:#ce5c00;font-weight:bold">&lt;</span> <span style="color:#000">Nz</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">;</span> <span style="color:#ce5c00;font-weight:bold">++</span><span style="color:#000">k</span><span style="color:#000;font-weight:bold">){</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#000">label_fast_vec</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">f_wrapped_vec</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">N</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">z</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">k</span><span style="color:#ce5c00;font-weight:bold">+</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">],</span> <span style="color:#000">ptr</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">slice_data_ptr</span><span style="color:#000;font-weight:bold">),</span> <span style="color:#000">cache_next</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">N</span><span style="color:#000;font-weight:bold">);</span>
 </span></span><span style="display:flex;"><span>               
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">int</span> l <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; l <span style="color:#f92672">&lt;</span> NN; )
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span>((l <span style="color:#f92672">/</span> N) <span style="color:#f92672">!=</span> N<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span> <span style="color:#f92672">&amp;&amp;</span> (l <span style="color:#f92672">%</span> N) <span style="color:#f92672">!=</span> N<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>){
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">for</span><span style="color:#000;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">l</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">;</span> <span style="color:#000">l</span> <span style="color:#ce5c00;font-weight:bold">&lt;</span> <span style="color:#000">NN</span><span style="color:#000;font-weight:bold">;</span> <span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#204a87;font-weight:bold">if</span><span style="color:#000;font-weight:bold">((</span><span style="color:#000">l</span> <span style="color:#ce5c00;font-weight:bold">/</span> <span style="color:#000">N</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">!=</span> <span style="color:#000">N</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span> <span style="color:#ce5c00;font-weight:bold">&amp;&amp;</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">l</span> <span style="color:#ce5c00;font-weight:bold">%</span> <span style="color:#000">N</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">!=</span> <span style="color:#000">N</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">){</span>
 </span></span><span style="display:flex;"><span>            
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">char</span> label_flags <span style="color:#f92672">=</span> (cache_prev[l] <span style="color:#f92672">|</span> cache_prev[l <span style="color:#f92672">+</span> N] <span style="color:#f92672">|</span> cache_next[l] <span style="color:#f92672">|</span> cache_next[l <span style="color:#f92672">+</span> N]);
-</span></span><span style="display:flex;"><span>                <span style="color:#f92672">++</span>l;
-</span></span><span style="display:flex;"><span>                label_flags <span style="color:#f92672">|=</span> (cache_prev[l] <span style="color:#f92672">|</span> cache_prev[l <span style="color:#f92672">+</span> N] <span style="color:#f92672">|</span> cache_next[l] <span style="color:#f92672">|</span> cache_next[l <span style="color:#f92672">+</span> N]);
+</span></span><span style="display:flex;"><span>                <span style="color:#204a87;font-weight:bold">char</span> <span style="color:#000">label_flags</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">cache_prev</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">l</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">|</span> <span style="color:#000">cache_prev</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">l</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#000">N</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">|</span> <span style="color:#000">cache_next</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">l</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">|</span> <span style="color:#000">cache_next</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">l</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#000">N</span><span style="color:#000;font-weight:bold">]);</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ce5c00;font-weight:bold">++</span><span style="color:#000">l</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#000">label_flags</span> <span style="color:#ce5c00;font-weight:bold">|=</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">cache_prev</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">l</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">|</span> <span style="color:#000">cache_prev</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">l</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#000">N</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">|</span> <span style="color:#000">cache_next</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">l</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">|</span> <span style="color:#000">cache_next</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">l</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#000">N</span><span style="color:#000;font-weight:bold">]);</span>
 </span></span><span style="display:flex;"><span>            
-</span></span><span style="display:flex;"><span>                iter_cnt<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#000">iter_cnt</span><span style="color:#ce5c00;font-weight:bold">++</span><span style="color:#000;font-weight:bold">;</span>
 </span></span><span style="display:flex;"><span> 
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span>(iter_cnt <span style="color:#f92672">%</span> <span style="color:#ae81ff">100000</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
-</span></span><span style="display:flex;"><span>                    cout <span style="color:#f92672">&lt;&lt;</span> iter_cnt <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34; cubes checked from &#34;</span> <span style="color:#f92672">&lt;&lt;</span> grid_size <span style="color:#f92672">&lt;&lt;</span> endl;                
+</span></span><span style="display:flex;"><span>                <span style="color:#204a87;font-weight:bold">if</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">iter_cnt</span> <span style="color:#ce5c00;font-weight:bold">%</span> <span style="color:#0000cf;font-weight:bold">100000</span> <span style="color:#ce5c00;font-weight:bold">==</span> <span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#000">cout</span> <span style="color:#ce5c00;font-weight:bold">&lt;&lt;</span> <span style="color:#000">iter_cnt</span> <span style="color:#ce5c00;font-weight:bold">&lt;&lt;</span> <span style="color:#4e9a06">&#34; cubes checked from &#34;</span> <span style="color:#ce5c00;font-weight:bold">&lt;&lt;</span> <span style="color:#000">grid_size</span> <span style="color:#ce5c00;font-weight:bold">&lt;&lt;</span> <span style="color:#000">endl</span><span style="color:#000;font-weight:bold">;</span>                
 </span></span><span style="display:flex;"><span>            
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span>(COMPLETELY_LABELED(label_flags)){
-</span></span><span style="display:flex;"><span>                    result[<span style="color:#ae81ff">3</span><span style="color:#f92672">*</span>cnt    ] <span style="color:#f92672">=</span> x[(l <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">/</span> N];
-</span></span><span style="display:flex;"><span>                    result[<span style="color:#ae81ff">3</span><span style="color:#f92672">*</span>cnt <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> y[(l <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">%</span> N];
-</span></span><span style="display:flex;"><span>                    result[<span style="color:#ae81ff">3</span><span style="color:#f92672">*</span>cnt <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>] <span style="color:#f92672">=</span> z[k];
+</span></span><span style="display:flex;"><span>                <span style="color:#204a87;font-weight:bold">if</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">COMPLETELY_LABELED</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">label_flags</span><span style="color:#000;font-weight:bold">)){</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#000">result</span><span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">3</span><span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">cnt</span>    <span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">x</span><span style="color:#000;font-weight:bold">[(</span><span style="color:#000">l</span> <span style="color:#ce5c00;font-weight:bold">-</span> <span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">/</span> <span style="color:#000">N</span><span style="color:#000;font-weight:bold">];</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#000">result</span><span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">3</span><span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">cnt</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">y</span><span style="color:#000;font-weight:bold">[(</span><span style="color:#000">l</span> <span style="color:#ce5c00;font-weight:bold">-</span> <span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">%</span> <span style="color:#000">N</span><span style="color:#000;font-weight:bold">];</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#000">result</span><span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">3</span><span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">cnt</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#0000cf;font-weight:bold">2</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">z</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">k</span><span style="color:#000;font-weight:bold">];</span>
 </span></span><span style="display:flex;"><span>                    
-</span></span><span style="display:flex;"><span>                    <span style="color:#f92672">++</span>cnt;
-</span></span><span style="display:flex;"><span>                }
-</span></span><span style="display:flex;"><span>            }<span style="color:#66d9ef">else</span>
-</span></span><span style="display:flex;"><span>                 <span style="color:#f92672">++</span>l;
+</span></span><span style="display:flex;"><span>                    <span style="color:#ce5c00;font-weight:bold">++</span><span style="color:#000">cnt</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">}</span><span style="color:#204a87;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>                 <span style="color:#ce5c00;font-weight:bold">++</span><span style="color:#000">l</span><span style="color:#000;font-weight:bold">;</span>
 </span></span><span style="display:flex;"><span>                 
-</span></span><span style="display:flex;"><span>        tmp        <span style="color:#f92672">=</span> cache_prev;
-</span></span><span style="display:flex;"><span>        cache_prev <span style="color:#f92672">=</span> cache_next;
-</span></span><span style="display:flex;"><span>        cache_next <span style="color:#f92672">=</span> tmp;
-</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>        <span style="color:#000">tmp</span>        <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">cache_prev</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">cache_prev</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">cache_next</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">cache_next</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">tmp</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">}</span>
 </span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">*</span>size <span style="color:#f92672">=</span> cnt <span style="color:#f92672">*</span> <span style="color:#ae81ff">3</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">size</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">cnt</span> <span style="color:#ce5c00;font-weight:bold">*</span> <span style="color:#0000cf;font-weight:bold">3</span><span style="color:#000;font-weight:bold">;</span>
 </span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    cout <span style="color:#f92672">&lt;&lt;</span> cnt <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;  completely labeled cubes found, &#34;</span> <span style="color:#f92672">&lt;&lt;</span> grid_size <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34; checked!&#34;</span> <span style="color:#f92672">&lt;&lt;</span> endl;
+</span></span><span style="display:flex;"><span>    <span style="color:#000">cout</span> <span style="color:#ce5c00;font-weight:bold">&lt;&lt;</span> <span style="color:#000">cnt</span> <span style="color:#ce5c00;font-weight:bold">&lt;&lt;</span> <span style="color:#4e9a06">&#34;  completely labeled cubes found, &#34;</span> <span style="color:#ce5c00;font-weight:bold">&lt;&lt;</span> <span style="color:#000">grid_size</span> <span style="color:#ce5c00;font-weight:bold">&lt;&lt;</span> <span style="color:#4e9a06">&#34; checked!&#34;</span> <span style="color:#ce5c00;font-weight:bold">&lt;&lt;</span> <span style="color:#000">endl</span><span style="color:#000;font-weight:bold">;</span>
 </span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">delete</span>[] cache_prev;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">delete</span>[] cache_next;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">delete</span>[] slice_data_ptr;
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">delete</span><span style="color:#000;font-weight:bold">[]</span> <span style="color:#000">cache_prev</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">delete</span><span style="color:#000;font-weight:bold">[]</span> <span style="color:#000">cache_next</span><span style="color:#000;font-weight:bold">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">delete</span><span style="color:#000;font-weight:bold">[]</span> <span style="color:#000">slice_data_ptr</span><span style="color:#000;font-weight:bold">;</span>
 </span></span><span style="display:flex;"><span>        
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;    
-</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">;</span>    
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">}</span>
 </span></span></code></pre></div><p>Notice that instead of simplicial space subdivision we have cubic grid.
 Here&rsquo;s a little trick: let&rsquo;s call cube <em>completely labeled</em> if set of its vertices contains every possible labeling.</p>
-<p><p class="markdown-image">
-  <img src="/images/labeling.svg" alt="Integer labeling"  />
-</p></p>
+<p><img src="/images/labeling.svg" alt="Integer labeling"></p>
 <p>It&rsquo;s easy to see that completely labeled cube contains completely labeled simplex.
 If we find such cube we can return necessary simplex, compute line segment where or
 &hellip; just return corner coordinates which were enough for my purposes back then.
 Because for small enough grids completely labeled cubes also can be used as rough, &ldquo;voxel&rdquo; approximation to zero set.</p>
-<h2 id="details">Details <a href="#details" class="anchor">🔗</a></h2><p>Labeling data of cube layer stored in <em>cache_prev</em>, <em>cache_next</em> variables.
+<h2 id="details">Details</h2>
+<p>Labeling data of cube layer stored in <em>cache_prev</em>, <em>cache_next</em> variables.
 On every iteration we load two consecutive function data slices.
 Cube labeling set is encoded by bits in  <em>label_flags</em> variable.</p>
 <p>Basically, here we sum up some integer values for every cube of our grid in some speed-optimized manner.</p>
@@ -256,71 +297,43 @@ Cube labeling set is encoded by bits in  <em>label_flags</em> variable.</p>
 </code></pre><p>and that&rsquo;s it.</p>
 <p>Note, that computations for each data slice (and actually for single grid cell) are independent.
 Such code can be easily parallelized with standard frameworks like OMP or even ported on GPU.</p>
-<h2 id="instead-of-conclusion">Instead of conclusion <a href="#instead-of-conclusion" class="anchor">🔗</a></h2><p>Now we have extended picture of algorithms for zero set computation.
+<h2 id="instead-of-conclusion">Instead of conclusion</h2>
+<p>Now we have extended picture of algorithms for zero set computation.
 Moreover, one can view marching algorithms as simplified versions of general simplex labeling.</p>
 <table>
   <thead>
       <tr>
-          <th style="text-align: left">Signature</th>
-          <th style="text-align: left">Method</th>
-          <th style="text-align: left">Manifold type</th>
+          <th>Signature</th>
+          <th>Method</th>
+          <th>Manifold type</th>
       </tr>
   </thead>
   <tbody>
       <tr>
-          <td style="text-align: left">R<sup>2</sup> →  R</td>
-          <td style="text-align: left">Marching squares</td>
-          <td style="text-align: left">Curve</td>
+          <td>R<sup>2</sup> →  R</td>
+          <td>Marching squares</td>
+          <td>Curve</td>
       </tr>
       <tr>
-          <td style="text-align: left">R<sup>3</sup> → R</td>
-          <td style="text-align: left">Marching cubes</td>
-          <td style="text-align: left">Surface</td>
+          <td>R<sup>3</sup> → R</td>
+          <td>Marching cubes</td>
+          <td>Surface</td>
       </tr>
       <tr>
-          <td style="text-align: left">R<sup>n+d</sup> → R<sup>n</sup></td>
-          <td style="text-align: left"><strong>Simplex labeling</strong></td>
-          <td style="text-align: left">d-Manifold</td>
+          <td>R<sup>n+d</sup> → R<sup>n</sup></td>
+          <td><strong>Simplex labeling</strong></td>
+          <td>d-Manifold</td>
       </tr>
   </tbody>
 </table>
-<p>Full version of the code you can find <a href="https://github.com/mihael-tunik/PLClib/blob/master/lib_src/PLC_lib_vec.cpp" target="_blank" rel="noopener">here</a>.</p>
-<p><a href="https://github.com/mihael-tunik/PLClib" target="_blank" rel="noopener">Repository</a> contains corresponding python package (warning: this version is not well-tested) and where you can find examples and try it by your own.</p>
-    </div>
-        <div class="tags">
-                <a href="http://mihael-tunik.github.io/tags/algorithms">algorithms</a>
-                <a href="http://mihael-tunik.github.io/tags/easy">easy</a>
-                <a href="http://mihael-tunik.github.io/tags/cpp">cpp</a>
+<p>Full version of the code you can find <a href="https://github.com/mihael-tunik/PLClib/blob/master/lib_src/PLC_lib_vec.cpp">here</a>.</p>
+<p><a href="https://github.com/mihael-tunik/PLClib">Repository</a> contains corresponding python package (warning: this version is not well-tested) and where you can find examples and try it by your own.</p>
         </div>
-</section>
-    </main>
-    <footer id="footer">
-        <div id="social">
-    <a class="symbol" href="https://github.com/mihael-tunik" rel="me" target="_blank">
-        <svg fill="#bbbbbb" width="28" height="28"  viewBox="0 0 72 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>Github</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Social-Icons---Rounded-Black" transform="translate(-264.000000, -939.000000)">
-            <g id="Github" transform="translate(264.000000, 939.000000)">
-                <path d="M8,72 L64,72 C68.418278,72 72,68.418278 72,64 L72,8 C72,3.581722 68.418278,-8.11624501e-16 64,0 L8,0 C3.581722,8.11624501e-16 -5.41083001e-16,3.581722 0,8 L0,64 C5.41083001e-16,68.418278 3.581722,72 8,72 Z" id="Rounded" fill="#bbbbbb"></path>
-                <path d="M35.9985,13 C22.746,13 12,23.7870921 12,37.096644 C12,47.7406712 18.876,56.7718301 28.4145,59.9584121 C29.6145,60.1797862 30.0525,59.4358488 30.0525,58.7973276 C30.0525,58.2250681 30.0315,56.7100863 30.0195,54.6996482 C23.343,56.1558981 21.9345,51.4693938 21.9345,51.4693938 C20.844,48.6864054 19.2705,47.9454799 19.2705,47.9454799 C17.091,46.4500754 19.4355,46.4801943 19.4355,46.4801943 C21.843,46.6503662 23.1105,48.9634994 23.1105,48.9634994 C25.2525,52.6455377 28.728,51.5823398 30.096,50.9649018 C30.3135,49.4077535 30.9345,48.3460615 31.62,47.7436831 C26.2905,47.1352808 20.688,45.0691228 20.688,35.8361671 C20.688,33.2052792 21.6225,31.0547881 23.1585,29.3696344 C22.911,28.7597262 22.0875,26.3110578 23.3925,22.9934585 C23.3925,22.9934585 25.4085,22.3459017 29.9925,25.4632101 C31.908,24.9285993 33.96,24.6620468 36.0015,24.6515052 C38.04,24.6620468 40.0935,24.9285993 42.0105,25.4632101 C46.5915,22.3459017 48.603,22.9934585 48.603,22.9934585 C49.9125,26.3110578 49.089,28.7597262 48.8415,29.3696344 C50.3805,31.0547881 51.309,33.2052792 51.309,35.8361671 C51.309,45.0917119 45.6975,47.1292571 40.3515,47.7256117 C41.2125,48.4695491 41.9805,49.9393525 41.9805,52.1877301 C41.9805,55.4089489 41.9505,58.0067059 41.9505,58.7973276 C41.9505,59.4418726 42.3825,60.1918338 43.6005,59.9554002 C53.13,56.7627944 60,47.7376593 60,37.096644 C60,23.7870921 49.254,13 35.9985,13" fill="#FFFFFF"></path>
-            </g>
-        </g>
-    </g>
-</svg>
-    </a>
+    </article>
 </div>
-    <div class="copyright">
-       © Copyright 
-       2024 
-       <span class="split">
-        <svg fill="#bbbbbb" width="15" height="15" version="1.1" id="heart-15" xmlns="http://www.w3.org/2000/svg" width="15px" height="15px" viewBox="0 0 15 15">
-  
-</svg>
-       </span>
-    </div>
+            <footer class="footer">    
+    <p>⚡️ Blog powered by <a href="https://gohugo.io/" target="_blank">Hugo</a>. Using <a href="https://github.com/sergiobarriel/tophat-theme" target="_blank">Top Hat</a> theme.</p>
 </footer>
-  </body>
+        </div>
+    </body>
 </html>

@@ -28,7 +28,7 @@ div.content {
 /* fonts size */
 /* colors */
 /* defaults */
-@media screen and (max-width: 1070px) {
+@media screen and (max-width: 1270px) {
   div.content {
     width: 100%;
   }
@@ -136,7 +136,7 @@ article, .single article {
   background-color: #fff;
 }
 article.featured, .single article.featured {
-  background-color: #ffefff;
+  background-color: #ddddff;
   border-color: #5374cf;
 }
 article div.article-meta, .single article div.article-meta {
@@ -154,16 +154,19 @@ article div.article-meta ul.article-info, .single article div.article-meta ul.ar
   list-style-type: none;
   margin: 0px;
   padding: 0px;
+  /*color: #ff0000;*/
 }
 article div.article-meta ul.article-info li, .single article div.article-meta ul.article-info li {
   display: inline-block;
   margin-right: 5px;
+  /*color: #ff0000;*/
 }
 article div.article-meta ul.article-info li span, .single article div.article-meta ul.article-info li span {
   margin-right: 5px;
   font-size: 17px;
   vertical-align: bottom;
-  color: #ffffff;
+  /*color: #ffffff;*/
+  color: #aaaabb;
 }
 article div.article-meta ul.article-tags, .single article div.article-meta ul.article-tags {
   font-family: "Open Sans", sans-serif;
@@ -267,7 +270,7 @@ article div.article-content blockquote p, .single article div.article-content bl
 /* fonts size */
 /* colors */
 /* defaults */
-@media screen and (max-width: 1070px) {
+@media screen and (max-width: 1270px) {
   article div.article-meta, .single article div.article-meta {
     display: inherit;
   }
@@ -315,7 +318,7 @@ div.list ul.tags {
   border-radius: 0px;
   padding: 15px;
   margin-bottom: 15px;
-  background-color: #fff;
+  background-color: #ffffff;
 }
 div.list ul.tags li.tag {
   display: inline-block;

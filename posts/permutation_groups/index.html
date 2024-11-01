@@ -3,7 +3,7 @@
     <head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta content='text/html; charset=utf-8' http-equiv='content-type' />
-<meta name="generator" content="Hugo 0.136.3">
+<meta name="generator" content="Hugo 0.136.5">
 <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans:400,700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Bitter&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -17,8 +17,8 @@ Such permutation groups has been studied a lot and there&rsquo;s a whole world o
 In this article we&rsquo;ll look at Sims-Schreier algorithm in context of group order computation and in the end I&rsquo;ll show a fun way to represent Rubick&rsquo;s cube.
 Let&rsquo;s dive in!">
 <meta name="author" content="">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Permutation groups" />
+
+
 <meta property="og:description" content="In mathematics, when you change the order of elements in some collection it is called a permutation.
 You can &ldquo;multiply&rdquo; permutations by taking their composition and for given permutation you can always find inverse one which simply reverses its action.
 And also we can imagine identity permutation which does nothing with order of elements.
@@ -26,9 +26,9 @@ This means permutations can form a very special algebraic structures, groups (re
 Such permutation groups has been studied a lot and there&rsquo;s a whole world of algorithms around them.
 In this article we&rsquo;ll look at Sims-Schreier algorithm in context of group order computation and in the end I&rsquo;ll show a fun way to represent Rubick&rsquo;s cube.
 Let&rsquo;s dive in!" />
-<meta property="og:url" content="https://mihael-tunik.github.io/posts/permutation_groups/" />
 
-<meta property="og:author" content="">
+
+
 
 
 
@@ -84,7 +84,7 @@ Let&rsquo;s dive in!">
             <span class="material-icons">timer</span>8 min read
         </li>
         <li class="words-count" style="">
-            <span class="material-icons">article</span>1644 words
+            <span class="material-icons">article</span>1629 words
         </li>
     </ul>
     <ul class="article-tags" style="">
@@ -291,13 +291,9 @@ generating set including only one permutation for every pair <em>(i, j)</em> whi
 <p>Recently, I came across this nice way to represent Rubick&rsquo;s cubes as planar graphs (left on the picture and cube net is shown for comparison).
 <img src="/images/cube2x2_id.svg" alt="cube2x2_id">
 This representation is very helpful for understanding which permutations are equivalent to cube rotations.
-For this scheme there&rsquo;s two types of possible rotations. First, there&rsquo;s <em>inner rotation</em>, example:
 <img src="/images/cube2x2_r1.svg" alt="cube2x2_r1">
-<img src="/images/cube2x2_r3.svg" alt="cube2x2_r3">
-And ther&rsquo;s <em>outer rotation</em>:
-<img src="/images/cube2x2_r2.svg" alt="cube2x2_r2">
-However all cube rotations are symmetrical to each other and there&rsquo;s no different types for them.
-And so inner and outer rotations are coincide up to graph vertices enumeration.</p>
+Note, for this scheme there&rsquo;s two &ldquo;different&rdquo; types of possible rotations. There&rsquo;s <em>inner rotation</em> and <em>outer rotation</em>.
+They are coincide (up to enumeration) with each other and different only on the picture.</p>
 <p>It&rsquo;s easy to see that corresponding to pictures generating permutations are</p>
 <pre tabindex="0"><code>[[1 , 13, 9, 3 , 23, 6 , 7 , 14, 10, 4 , 24, 12, 11, 5 , 15, 16, 17, 18, 19, 20, 21, 22, 8 , 2 ],
  [1 , 2 , 3, 14, 11, 5 , 7 , 8 , 9 , 16, 12, 6 , 13, 18, 15, 20, 17, 22, 19, 24, 21, 4 , 23, 10],

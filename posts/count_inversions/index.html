@@ -70,7 +70,7 @@ However, did you know that there exists a family of algorithms to solve the it w
             <span class="material-icons">timer</span>3 min read
         </li>
         <li class="words-count" style="">
-            <span class="material-icons">article</span>464 words
+            <span class="material-icons">article</span>634 words
         </li>
     </ul>
     <ul class="article-tags" style="">
@@ -123,8 +123,12 @@ Since <em>T</em> is ordinary array we can simply iterate from <em>a[i]+1</em> to
 And as we know (don&rsquo;t we?) that such queries on array interval can be made more efficient with help of data structures.
 Fenwick tree here is certainly a way to go. Let&rsquo;s do it, start from class for our tree.</p>
 <h2 id="fenwick-tree">Fenwick tree</h2>
-<p>First discuss Fenwick tree a little bit.
-&hellip;</p>
+<p>First discuss Fenwick tree a little bit.</p>
+<p>Let&rsquo;s start from practical definition.
+From this point Fenwick tree is just an array which stores specific interval sums of given array, exactly:</p>
+<blockquote>
+<p><em>T[i] = a[f(i)] + &hellip; + a[i]</em>, where <em>f(i) = i AND (i + 1)</em>.</p>
+</blockquote>
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">FenwickTree</span><span style="color:#ce5c00;font-weight:bold">:</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">def</span> <span style="color:#000">__init__</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">self</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">n</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#000">self</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">t</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">*</span> <span style="color:#000">n</span> <span style="color:#a40000">#</span> <span style="color:#204a87;font-weight:bold">long</span> <span style="color:#000">empty</span> <span style="color:#000">list</span> 
@@ -144,7 +148,28 @@ Fenwick tree here is certainly a way to go. Let&rsquo;s do it, start from class 
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">def</span> <span style="color:#000">query</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">self</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">i</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">j</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">self</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">prefix_sum</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">j</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">-</span> <span style="color:#000">self</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">prefix_sum</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">i</span> <span style="color:#ce5c00;font-weight:bold">-</span> <span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">)</span>
-</span></span></code></pre></div><h2 id="back-to-flag-arrays">Back to flag arrays</h2>
+</span></span></code></pre></div><p>Lets build table, where each column shows which array indexes are stored for every tree index.
+<img src="/images/fenwick.svg" alt="cube2x2_id"></p>
+<p>Suppose, you want to modify <em>a[8]</em>.
+Then, following indexes will be affected by <em>modify()</em>:</p>
+<ul>
+<li>8 (01000);</li>
+<li>8 OR (8 + 1) = 9 (01001);</li>
+<li>9 OR (9 + 1) = 11 (01011);</li>
+<li>11 OR (11 + 1) = 15 (01111);</li>
+</ul>
+<p>These indexes coincide with intersection shown on the table above.</p>
+<p>Now, suppose, you want to find prefix sum of first 15 elements,
+then following indexes will be affected in <em>prefix_sum()</em>:</p>
+<ul>
+<li>14 (01110);</li>
+<li>14 AND (14 + 1) - 1 = 13 (01101);</li>
+<li>13 AND (13 + 1) - 1 = 11 (01011);</li>
+<li>11 AND (11 + 1) - 1 = 7  (00111);</li>
+</ul>
+<p>So <em>a[0] + &hellip; + a[14] = T[7] + T[11] + T[13] + T[14]</em>
+&hellip;</p>
+<h2 id="back-to-flag-arrays">Back to flag arrays</h2>
 <p>Now flag array code snippet transforms into:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># O(n log n)
 </span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"></span><span style="color:#000">def</span> <span style="color:#000">inversions_fenwick</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">a</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>

@@ -3,7 +3,7 @@
     <head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta content='text/html; charset=utf-8' http-equiv='content-type' />
-<meta name="generator" content="Hugo 0.140.1">
+<meta name="generator" content="Hugo 0.140.2">
 <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans:400,700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Bitter&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -67,10 +67,10 @@ However, did you know that there exists a family of algorithms to solve the it w
             <time class="time">26 Dec 2024</time>
         </li>
         <li class="reading-time" style="">
-            <span class="material-icons">timer</span>3 min read
+            <span class="material-icons">timer</span>5 min read
         </li>
         <li class="words-count" style="">
-            <span class="material-icons">article</span>634 words
+            <span class="material-icons">article</span>879 words
         </li>
     </ul>
     <ul class="article-tags" style="">
@@ -125,10 +125,45 @@ Fenwick tree here is certainly a way to go. Let&rsquo;s do it, start from class 
 <h2 id="fenwick-tree">Fenwick tree</h2>
 <p>First discuss Fenwick tree a little bit.</p>
 <p>Let&rsquo;s start from practical definition.
-From this point Fenwick tree is just an array which stores specific interval sums of given array, exactly:</p>
+From this point <em>Fenwick tree</em> is just an array which stores specific interval sums of given array, exactly:</p>
 <blockquote>
 <p><em>T[i] = a[f(i)] + &hellip; + a[i]</em>, where <em>f(i) = i AND (i + 1)</em>.</p>
 </blockquote>
+<p>It can be already build directly from this definition in O(n ^ 2) (however, it&rsquo;s easy to do this in O(n log n) and even in O(n)).
+The most crucial part here how to compute any prefix sum using it.</p>
+<p>To see why it is actually <em>a tree</em> let&rsquo;s look at the picture:
+<img src="/images/fenwick_tree.svg" alt="fenwick_tree"></p>
+<p>It is called <em>interrogation tree</em> and basically gives us a hint how to compute prefix sum from tree nodes.
+We start from our index and then toggle last significant bits and make one step back from this number to get into another precomputed interval.</p>
+<p>For example, if we get <em>k</em> then we compute <em>f(k)</em>, so <em>a[f(k)] + &hellip; + a[k]</em> is in <em>T[k]</em> by definition of <em>T</em>.
+Then we can proceed with <em>f(k)-1</em> to get lower part of sum <em>a[f(f(k)-1)] + &hellip; + a[f(k)-1]</em>, until we will finally move down to zero index.
+Obviously, <em>f(k) - 1 &lt; k</em> and someday this algorithm will stop since we started it from finite number <em>k</em>.</p>
+<p>Ok, and how to modify nodes of the tree if we want to change one element in our array by adding some number <em>d</em>?
+We change only intervals which include <em>a[i]</em>:  <em>T[j]: f(j) &lt;= i &lt;= j</em>. What are these <em>j</em>?</p>
+<blockquote>
+<p>Firstly, it should start from <em>j = i</em>, then it can be proved that next element in this sequence is given by formula j | (j + 1)_.</p>
+</blockquote>
+<p>Lets build table, where each column shows which array indexes are stored for every tree index.
+<img src="/images/fenwick.svg" alt="fenwick_table"></p>
+<p>Suppose, you want to modify <em>a[8]</em>.
+Then, following indexes will be affected by <em>modify()</em>:</p>
+<ul>
+<li>8 (01000);</li>
+<li>8 OR (8 + 1) = 9 (01001);</li>
+<li>9 OR (9 + 1) = 11 (01011);</li>
+<li>11 OR (11 + 1) = 15 (01111);</li>
+</ul>
+<p>These indexes coincide with intersection shown on the table above.</p>
+<p>Now, suppose, you want to find prefix sum of first 15 elements,
+then following indexes will be affected in <em>prefix_sum()</em> (also, look at the interrogation tree above):</p>
+<ul>
+<li>14 (01110);</li>
+<li>14 AND (14 + 1) - 1 = 13 (01101);</li>
+<li>13 AND (13 + 1) - 1 = 11 (01011);</li>
+<li>11 AND (11 + 1) - 1 = 7  (00111);</li>
+</ul>
+<p>So <em>a[0] + &hellip; + a[14] = T[7] + T[11] + T[13] + T[14].</em></p>
+<p>Finally, here&rsquo;s the code:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">FenwickTree</span><span style="color:#ce5c00;font-weight:bold">:</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">def</span> <span style="color:#000">__init__</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">self</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">n</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#000">self</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">t</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">*</span> <span style="color:#000">n</span> <span style="color:#a40000">#</span> <span style="color:#204a87;font-weight:bold">long</span> <span style="color:#000">empty</span> <span style="color:#000">list</span> 
@@ -148,28 +183,7 @@ From this point Fenwick tree is just an array which stores specific interval sum
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">def</span> <span style="color:#000">query</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">self</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">i</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">j</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">self</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">prefix_sum</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">j</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">-</span> <span style="color:#000">self</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">prefix_sum</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">i</span> <span style="color:#ce5c00;font-weight:bold">-</span> <span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">)</span>
-</span></span></code></pre></div><p>Lets build table, where each column shows which array indexes are stored for every tree index.
-<img src="/images/fenwick.svg" alt="cube2x2_id"></p>
-<p>Suppose, you want to modify <em>a[8]</em>.
-Then, following indexes will be affected by <em>modify()</em>:</p>
-<ul>
-<li>8 (01000);</li>
-<li>8 OR (8 + 1) = 9 (01001);</li>
-<li>9 OR (9 + 1) = 11 (01011);</li>
-<li>11 OR (11 + 1) = 15 (01111);</li>
-</ul>
-<p>These indexes coincide with intersection shown on the table above.</p>
-<p>Now, suppose, you want to find prefix sum of first 15 elements,
-then following indexes will be affected in <em>prefix_sum()</em>:</p>
-<ul>
-<li>14 (01110);</li>
-<li>14 AND (14 + 1) - 1 = 13 (01101);</li>
-<li>13 AND (13 + 1) - 1 = 11 (01011);</li>
-<li>11 AND (11 + 1) - 1 = 7  (00111);</li>
-</ul>
-<p>So <em>a[0] + &hellip; + a[14] = T[7] + T[11] + T[13] + T[14]</em>
-&hellip;</p>
-<h2 id="back-to-flag-arrays">Back to flag arrays</h2>
+</span></span></code></pre></div><h2 id="back-to-flag-arrays">Back to flag arrays</h2>
 <p>Now flag array code snippet transforms into:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># O(n log n)
 </span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"></span><span style="color:#000">def</span> <span style="color:#000">inversions_fenwick</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">a</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
@@ -180,7 +194,7 @@ then following indexes will be affected in <em>prefix_sum()</em>:</p>
 </span></span><span style="display:flex;"><span>        <span style="color:#000">cnt</span> <span style="color:#ce5c00;font-weight:bold">+=</span> <span style="color:#000">T</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">query</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">a</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">i</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">M</span><span style="color:#000;font-weight:bold">)</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">cnt</span>
-</span></span></code></pre></div><p>And that&rsquo;s it. This simple idea has caught my attention recently, because it is not well known as classic mergesort-like algorithm.</p>
+</span></span></code></pre></div><p>And that&rsquo;s it. This simple idea has caught my attention recently, since it is not well known as classic mergesort-like algorithm.</p>
 <h2 id="instead-of-conclusion">Instead of conclusion</h2>
 <p>In this small article we investigated nice solution of counting inversions in array problem.
 You can find full code <a href="https://github.com/mihael-tunik/train/tree/master/InversionsNumber">here</a>.</p>

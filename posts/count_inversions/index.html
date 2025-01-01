@@ -9,13 +9,13 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="https://mihael-tunik.github.io/css/styles.css" rel="stylesheet">
 <title>MT mini-blog</title>
-<meta name="description" content="Counting inversions in O(n log n) is infamous algorithmic question with divide and conquer solution.
-However, did you know that there exists a family of algorithms to solve the it with same asymptotics? Let&rsquo;s find out!">
+<meta name="description" content="Counting inversions in O(n log n) is legendary algorithmic question with infamous divide-and-conquer solution.
+However, did you know that there exists a family of algorithms to solve it with same asymptotics? Let&rsquo;s find out!">
 <meta name="author" content="">
 
 
-<meta property="og:description" content="Counting inversions in O(n log n) is infamous algorithmic question with divide and conquer solution.
-However, did you know that there exists a family of algorithms to solve the it with same asymptotics? Let&rsquo;s find out!" />
+<meta property="og:description" content="Counting inversions in O(n log n) is legendary algorithmic question with infamous divide-and-conquer solution.
+However, did you know that there exists a family of algorithms to solve it with same asymptotics? Let&rsquo;s find out!" />
 
 
 
@@ -23,8 +23,8 @@ However, did you know that there exists a family of algorithms to solve the it w
 
 
 
-<meta name="twitter:description" content="Counting inversions in O(n log n) is infamous algorithmic question with divide and conquer solution.
-However, did you know that there exists a family of algorithms to solve the it with same asymptotics? Let&rsquo;s find out!">
+<meta name="twitter:description" content="Counting inversions in O(n log n) is legendary algorithmic question with infamous divide-and-conquer solution.
+However, did you know that there exists a family of algorithms to solve it with same asymptotics? Let&rsquo;s find out!">
 
 
 </head>
@@ -70,7 +70,7 @@ However, did you know that there exists a family of algorithms to solve the it w
             <span class="material-icons">timer</span>6 min read
         </li>
         <li class="words-count" style="">
-            <span class="material-icons">article</span>1090 words
+            <span class="material-icons">article</span>1103 words
         </li>
     </ul>
     <ul class="article-tags" style="">
@@ -90,8 +90,8 @@ However, did you know that there exists a family of algorithms to solve the it w
             <h2 class="article-excerpt"></h2>  
         </div>
         <div class="article-content">
-            <p>Counting inversions in O(n log n) is infamous algorithmic question with divide and conquer solution.
-However, did you know that there exists a family of algorithms to solve the it with same asymptotics? Let&rsquo;s find out!</p>
+            <p>Counting inversions in O(n log n) is legendary algorithmic question with infamous divide-and-conquer solution.
+However, did you know that there exists a family of algorithms to solve it with same asymptotics? Let&rsquo;s find out!</p>
 <h2 id="inversions">Inversions</h2>
 <p>Let <em>a</em> be our array and <em>i, j</em> indexes.</p>
 <blockquote>
@@ -99,7 +99,8 @@ However, did you know that there exists a family of algorithms to solve the it w
 <em>a[i] &gt; a[j]</em> and <em>i &lt; j</em>.</p>
 </blockquote>
 <p>Simple quadratic algorithm can be easily constructed:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#000">def</span> <span style="color:#000">inversions_base</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">a</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># O(n ^ 2)
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"></span><span style="color:#000">def</span> <span style="color:#000">inversions_base</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">a</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">n</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">cnt</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">len</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">a</span><span style="color:#000;font-weight:bold">),</span> <span style="color:#0000cf;font-weight:bold">0</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">for</span> <span style="color:#000">i</span> <span style="color:#000">in</span> <span style="color:#000">range</span><span style="color:#000;font-weight:bold">(</span><span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">n</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">for</span> <span style="color:#000">j</span> <span style="color:#000">in</span> <span style="color:#000">range</span><span style="color:#000;font-weight:bold">(</span><span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">n</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
@@ -107,7 +108,8 @@ However, did you know that there exists a family of algorithms to solve the it w
 </span></span><span style="display:flex;"><span>                <span style="color:#000">cnt</span> <span style="color:#ce5c00;font-weight:bold">+=</span> <span style="color:#0000cf;font-weight:bold">1</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">cnt</span>
 </span></span></code></pre></div><p>How to progress from it? First we need to reformulate counting task in terms of <em>flag array</em>.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#000">def</span> <span style="color:#000">inversions_flag_array</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">a</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># more complicated, but still O(n ^ 2)
+</span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"></span><span style="color:#000">def</span> <span style="color:#000">inversions_flag_array</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">a</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">n</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">cnt</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">M</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">len</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">a</span><span style="color:#000;font-weight:bold">),</span> <span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">max</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">a</span><span style="color:#000;font-weight:bold">)</span> 
 </span></span><span style="display:flex;"><span>    <span style="color:#000">T</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">[</span><span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">*</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">M</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">)</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">for</span> <span style="color:#000">i</span> <span style="color:#000">in</span> <span style="color:#000">range</span><span style="color:#000;font-weight:bold">(</span><span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">n</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
@@ -117,7 +119,7 @@ However, did you know that there exists a family of algorithms to solve the it w
 </span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">cnt</span>
 </span></span></code></pre></div><p>What is going on here?
 We iterate over array elements one by one in order and use auxiliary array <em>T</em> of <em>flags</em>.
-Update <em>T[k] += 1</em> if we meet <em>k = a[i]</em> in array (for distinct arrays <em>T[k]=1</em> is enough). Then we can count number of occurrences for elements which are larger than <em>a[i]</em> but located before easily by watching <em>T</em>.
+Update <em>T[k] += 1</em> if we meet <em>k = a[i]</em> in array (for arrays with distinct elements <em>T[k]=1</em> is enough). Then we can count number of occurrences for elements which are larger than <em>a[i]</em> but located before easily by watching <em>T</em>.
 Since <em>T</em> is ordinary array we can simply iterate from <em>a[i]+1</em> to <em>max(a)</em>. That results in quadratic solution.</p>
 <p>Certainly we can do better, note that inner part of main cycle is a <em>sum query</em>.
 And as we know (don&rsquo;t we?) that such queries on array interval can be made more efficient with help of data structures.
@@ -202,7 +204,7 @@ Then, following indexes will be affected by <em>modify()</em>:</p>
 </span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">self</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">prefix_sum</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">j</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">-</span> <span style="color:#000">self</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">prefix_sum</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">i</span> <span style="color:#ce5c00;font-weight:bold">-</span> <span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">)</span>
 </span></span></code></pre></div><h2 id="back-to-flag-arrays">Back to flag arrays</h2>
 <p>Now flag array code snippet transforms into:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># O(n log n)
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># finally, O(n log n)
 </span></span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"></span><span style="color:#000">def</span> <span style="color:#000">inversions_fenwick</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">a</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">n</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">cnt</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">M</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">len</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">a</span><span style="color:#000;font-weight:bold">),</span> <span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">20</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">T</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">FenwickTree</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">M</span><span style="color:#ce5c00;font-weight:bold">+</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">)</span>        

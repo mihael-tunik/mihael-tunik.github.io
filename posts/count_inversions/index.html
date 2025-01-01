@@ -67,10 +67,10 @@ However, did you know that there exists a family of algorithms to solve the it w
             <time class="time">26 Dec 2024</time>
         </li>
         <li class="reading-time" style="">
-            <span class="material-icons">timer</span>5 min read
+            <span class="material-icons">timer</span>6 min read
         </li>
         <li class="words-count" style="">
-            <span class="material-icons">article</span>879 words
+            <span class="material-icons">article</span>1090 words
         </li>
     </ul>
     <ul class="article-tags" style="">
@@ -130,31 +130,30 @@ From this point <em>Fenwick tree</em> is just an array which stores specific int
 <p><em>T[i] = a[f(i)] + &hellip; + a[i]</em>, where <em>f(i) = i AND (i + 1)</em>.</p>
 </blockquote>
 <p>It can be already build directly from this definition in O(n ^ 2) (however, it&rsquo;s easy to do this in O(n log n) and even in O(n)).
-The most crucial part here how to compute any prefix sum using it.</p>
+The most crucial part here how to compute any prefix sum efficiently using it.</p>
 <p>To see why it is actually <em>a tree</em> let&rsquo;s look at the picture:
 <img src="/images/fenwick_tree.svg" alt="fenwick_tree"></p>
 <p>It is called <em>interrogation tree</em> and basically gives us a hint how to compute prefix sum from tree nodes.
-We start from our index and then toggle last significant bits and make one step back from this number to get into another precomputed interval.</p>
+We start from our index and then toggle last significant bits and make one step back from this number to get into another precomputed interval.
+In other words, parent nodes in this tree is just numbers <em>f(i) - 1</em> what we get from child index <em>i</em>.</p>
 <p>For example, if we get <em>k</em> then we compute <em>f(k)</em>, so <em>a[f(k)] + &hellip; + a[k]</em> is in <em>T[k]</em> by definition of <em>T</em>.
 Then we can proceed with <em>f(k)-1</em> to get lower part of sum <em>a[f(f(k)-1)] + &hellip; + a[f(k)-1]</em>, until we will finally move down to zero index.
 Obviously, <em>f(k) - 1 &lt; k</em> and someday this algorithm will stop since we started it from finite number <em>k</em>.</p>
-<p>Ok, and how to modify nodes of the tree if we want to change one element in our array by adding some number <em>d</em>?
-We change only intervals which include <em>a[i]</em>:  <em>T[j]: f(j) &lt;= i &lt;= j</em>. What are these <em>j</em>?</p>
-<blockquote>
-<p>Firstly, it should start from <em>j = i</em>, then it can be proved that next element in this sequence is given by formula j | (j + 1)_.</p>
-</blockquote>
-<p>Lets build table, where each column shows which array indexes are stored for every tree index.
-<img src="/images/fenwick.svg" alt="fenwick_table"></p>
-<p>Suppose, you want to modify <em>a[8]</em>.
-Then, following indexes will be affected by <em>modify()</em>:</p>
-<ul>
-<li>8 (01000);</li>
-<li>8 OR (8 + 1) = 9 (01001);</li>
-<li>9 OR (9 + 1) = 11 (01011);</li>
-<li>11 OR (11 + 1) = 15 (01111);</li>
-</ul>
-<p>These indexes coincide with intersection shown on the table above.</p>
-<p>Now, suppose, you want to find prefix sum of first 15 elements,
+<p>And actually this will happen in logarithmic amount of steps, resulting in O(log n) complexity for sum computation.
+The argument here that every time you do <em>x AND (x + 1)</em> you toggle all k 1&rsquo;s at the end of number binary representation
+and therefore get at least k + 1 zero at the end. Then after substracting one you get at least k + 1 of 1&rsquo;s instead of zeros.
+Run this code to check:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#000">nums</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">list</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">range</span><span style="color:#000;font-weight:bold">(</span><span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">21</span><span style="color:#000;font-weight:bold">))</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">steps</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">[]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">for</span> <span style="color:#000">num</span> <span style="color:#000">in</span> <span style="color:#f57900">nums</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">cnt</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">step</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">num</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#0000cf;font-weight:bold">0</span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">while</span> <span style="color:#000">cnt</span> <span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#0000cf;font-weight:bold">0</span><span style="color:#ce5c00;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">step</span> <span style="color:#ce5c00;font-weight:bold">+=</span> <span style="color:#0000cf;font-weight:bold">1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">cnt</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">cnt</span> <span style="color:#ce5c00;font-weight:bold">&amp;</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">cnt</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">))</span> <span style="color:#ce5c00;font-weight:bold">-</span> <span style="color:#0000cf;font-weight:bold">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">steps</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">append</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">step</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">print</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">steps</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#a40000">#</span> <span style="color:#000">that</span><span style="color:#a40000">&#39;</span><span style="color:#000">s</span> <span style="color:#000">OEIS</span> <span style="color:#000">A000120</span> <span style="color:#000">with</span> <span style="color:#000">a</span> <span style="color:#000">shift</span>
+</span></span></code></pre></div><p>Let&rsquo;s look at an example. Suppose, you want to find prefix sum of first 15 elements,
 then following indexes will be affected in <em>prefix_sum()</em> (also, look at the interrogation tree above):</p>
 <ul>
 <li>14 (01110);</li>
@@ -163,6 +162,24 @@ then following indexes will be affected in <em>prefix_sum()</em> (also, look at 
 <li>11 AND (11 + 1) - 1 = 7  (00111);</li>
 </ul>
 <p>So <em>a[0] + &hellip; + a[14] = T[7] + T[11] + T[13] + T[14].</em></p>
+<p>Ok, now let&rsquo;s find out how to modify nodes of the tree if we&rsquo;ve just changed one element in our array by adding some number <em>d</em>?
+We should change only intervals which include <em>a[i]</em>:  <em>T[j]: f(j) &lt;= i &lt;= j</em>. What are these <em>j</em>?</p>
+<blockquote>
+<p>Firstly, it should start from <em>j = i</em>, then it can be proved that next element in this sequence is given by expression j | (j + 1).</p>
+</blockquote>
+<p>Not going too far into details this transformation add one more 1 into binary representation of the number, from right to left.
+Doing this until we get index larger then <em>size(T)</em> results in <em>log(size(T))</em> complexity.</p>
+<p>Lets build table, where each column shows which array indexes are stored for every tree index.
+<img src="/images/fenwick.svg" alt="fenwick_table"></p>
+<p>Let&rsquo;s look at an example. Suppose, you want to modify <em>a[8]</em>.
+Then, following indexes will be affected by <em>modify()</em>:</p>
+<ul>
+<li>8 (01000);</li>
+<li>8 OR (8 + 1) = 9 (01001);</li>
+<li>9 OR (9 + 1) = 11 (01011);</li>
+<li>11 OR (11 + 1) = 15 (01111);</li>
+</ul>
+<p>These indexes coincide with intersection shown on the table above.</p>
 <p>Finally, here&rsquo;s the code:</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">FenwickTree</span><span style="color:#ce5c00;font-weight:bold">:</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#000">def</span> <span style="color:#000">__init__</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">self</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">n</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
@@ -194,7 +211,8 @@ then following indexes will be affected in <em>prefix_sum()</em> (also, look at 
 </span></span><span style="display:flex;"><span>        <span style="color:#000">cnt</span> <span style="color:#ce5c00;font-weight:bold">+=</span> <span style="color:#000">T</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">query</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">a</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">i</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">M</span><span style="color:#000;font-weight:bold">)</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">cnt</span>
-</span></span></code></pre></div><p>And that&rsquo;s it. This simple idea has caught my attention recently, since it is not well known as classic mergesort-like algorithm.</p>
+</span></span></code></pre></div><p>Last, but not least: do not forget to compress coordinates in array (change elements to indexes in O(n log n)) to make the solution efficient.
+And that&rsquo;s it. This simple idea has caught my attention recently, since it is not well known as classic mergesort-like algorithm.</p>
 <h2 id="instead-of-conclusion">Instead of conclusion</h2>
 <p>In this small article we investigated nice solution of counting inversions in array problem.
 You can find full code <a href="https://github.com/mihael-tunik/train/tree/master/InversionsNumber">here</a>.</p>

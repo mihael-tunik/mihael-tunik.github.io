@@ -70,7 +70,7 @@ However, did you know that there exists a family of algorithms to solve it with 
             <span class="material-icons">timer</span>6 min read
         </li>
         <li class="words-count" style="">
-            <span class="material-icons">article</span>1103 words
+            <span class="material-icons">article</span>1123 words
         </li>
     </ul>
     <ul class="article-tags" style="">
@@ -86,7 +86,7 @@ However, did you know that there exists a family of algorithms to solve it with 
     </ul>
 </div>
         <div class="article-header">
-            <h1 class="article-title">Count inversions with Fenwick trees</h1>          
+            <h1 class="article-title">Count inversions with Fenwick tree</h1>          
             <h2 class="article-excerpt"></h2>  
         </div>
         <div class="article-content">
@@ -120,10 +120,13 @@ However, did you know that there exists a family of algorithms to solve it with 
 </span></span></code></pre></div><p>What is going on here?
 We iterate over array elements one by one in order and use auxiliary array <em>T</em> of <em>flags</em>.
 Update <em>T[k] += 1</em> if we meet <em>k = a[i]</em> in array (for arrays with distinct elements <em>T[k]=1</em> is enough). Then we can count number of occurrences for elements which are larger than <em>a[i]</em> but located before easily by watching <em>T</em>.
-Since <em>T</em> is ordinary array we can simply iterate from <em>a[i]+1</em> to <em>max(a)</em>. That results in quadratic solution.</p>
-<p>Certainly we can do better, note that inner part of main cycle is a <em>sum query</em>.
+Since <em>T</em> is ordinary array we can simply iterate from <em>a[i]+1</em> to <em>max(a)</em>. That still results in quadratic solution, however we can make improvements from here.</p>
+<p>Note that inner part of main cycle is a <em>sum query</em>.
 And as we know (don&rsquo;t we?) that such queries on array interval can be made more efficient with help of data structures.
 Fenwick tree here is certainly a way to go. Let&rsquo;s do it, start from class for our tree.</p>
+<blockquote>
+<p>One can actually substitute every appropriate data structure instead of Fenwick tree here, for example, interval tree.</p>
+</blockquote>
 <h2 id="fenwick-tree">Fenwick tree</h2>
 <p>First discuss Fenwick tree a little bit.</p>
 <p>Let&rsquo;s start from practical definition.

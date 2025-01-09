@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+    <head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta content='text/html; charset=utf-8' http-equiv='content-type' />
+<meta name="generator" content="Hugo 0.140.2">
+<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans:400,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bitter&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://mihael-tunik.github.io/css/styles.css" rel="stylesheet">
+<title>MT mini-blog</title>
+<meta name="description" content="Recently, one interesting problem in CF has caught my attention.
+Main idea is that given {-1, 1}-array it is required to compute variety of all possible sums on subarrays in linear time.
+Is that possible? And how Kadane&rsquo;s algorithm is involved here? In this article we&rsquo;ll try to find out.">
+<meta name="author" content="">
+
+
+<meta property="og:description" content="Recently, one interesting problem in CF has caught my attention.
+Main idea is that given {-1, 1}-array it is required to compute variety of all possible sums on subarrays in linear time.
+Is that possible? And how Kadane&rsquo;s algorithm is involved here? In this article we&rsquo;ll try to find out." />
+
+
+
+
+
+
+
+<meta name="twitter:description" content="Recently, one interesting problem in CF has caught my attention.
+Main idea is that given {-1, 1}-array it is required to compute variety of all possible sums on subarrays in linear time.
+Is that possible? And how Kadane&rsquo;s algorithm is involved here? In this article we&rsquo;ll try to find out.">
+
+
+</head>
+    <body>
+        <div class="content">
+            <nav class="blog-navigation">
+  <div class="left">
+      <div class="blog-logo">
+        <a href='/' title="MT mini-blog">
+          <img src="https://mihael-tunik.github.io/img/logo.svg" alt="MT mini-blog">
+        </a>
+      </div>
+      <div class="blog-info">
+          <div class="blog-title">
+            <a href='/' title="MT mini-blog">
+              <h1>MT mini-blog</h1>
+            </a>
+          </div>
+          <div class="blog-description">
+            <a href='/' title="MT mini-blog">
+              <h2>Things around computer science</h2>
+            </a>
+          </div>
+      </div>
+  </div>
+  <div class="right">
+    <div class="blog-links">
+      <ul class="links">
+          <li class="item page"><a href='/pages/about/' title="About">About</a></li><li class="item page"><a href='/uploads/cv_en.pdf' title="CV">CV</a></li>
+          <li class="item social"><a href='https://github.com/mihael-tunik' title="Github" target="_blank">Github</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="single">
+    <article>
+        <div class="article-meta">
+    <ul class="article-info">
+        <li class="time" style="">
+            <time class="time">09 Jan 2025</time>
+        </li>
+        <li class="reading-time" style="">
+            <span class="material-icons">timer</span>3 min read
+        </li>
+        <li class="words-count" style="">
+            <span class="material-icons">article</span>451 words
+        </li>
+    </ul>
+    <ul class="article-tags" style="">
+                <li>
+                    <a href='/tags/algorithms'>#algorithms</a>
+                </li>
+                <li>
+                    <a href='/tags/tutorials'>#tutorials</a>
+                </li>
+                <li>
+                    <a href='/tags/python'>#python</a>
+                </li>
+    </ul>
+</div>
+        <div class="article-header">
+            <h1 class="article-title">Compute sum variety in {-1, 1}-arrays with Kadane algorithm</h1>          
+            <h2 class="article-excerpt"></h2>  
+        </div>
+        <div class="article-content">
+            <p>Recently, one interesting problem in CF has caught my attention.
+Main idea is that given {-1, 1}-array it is required to compute variety of all possible sums on subarrays in linear time.
+Is that possible? And how Kadane&rsquo;s algorithm is involved here? In this article we&rsquo;ll try to find out.</p>
+<h2 id="problem-formulation">Problem formulation</h2>
+<p>Actual formulation is a bit more complicated.</p>
+<blockquote>
+<p>Given array <em>a</em> consisting of 1 and -1. Then index <em>k</em> and integer number <em>M</em> are chosen and in array we modify <em>a[k]=M</em>.
+It&rsquo;s required to find all distinct subarray sums in linear time.</p>
+</blockquote>
+<p>First question is logical: why it should be O(n) possible sums among n(n+1)/2 subarrays?
+It may be hard to say why first, let&rsquo;s make one step back and simplify the question.</p>
+<p>Let&rsquo;s not modify anything, how much sums we can get in {-1, 1}-array without any other values in?</p>
+<p>Such question seems already solvable. We know, that in {-1, 1}-array <em>x</em> there&rsquo;s minimal subarray sum greater or equal <em>#(number of -1)</em> and maximal is less or equal <em>#(number of 1)</em>. So, there couldn&rsquo;t be more then <em>x.length + 1</em> (including 0) distinct sums in <em>x</em>.</p>
+<p>Notice also that because there&rsquo;s only -1 or 1 in this array, subarray sums change very slightly (-1 or +1 exactly) if we move border index on one position.
+Since there exists step by step transformation between subarrays with minimal sum <em>s</em> and maximal sum <em>t</em>, there&rsquo;s a path between <em>s</em> and <em>t</em> with +1 and -1 on every &ldquo;edge&rdquo;.
+On this path we can&rsquo;t miss any intermediate number.
+Now, it is clear that list all of possible sums should include minimal and maximal sums and any value in between for any {-1, 1}-array.</p>
+<p>The problem is we can&rsquo;t compute minimal and maximal sums in O(n), <em>yet</em>.</p>
+<h2 id="kadane-algorithm">Kadane algorithm</h2>
+<p>To Do</p>
+<h2 id="decomposition">Decomposition</h2>
+<p>Now, when we can solve simplified version of the problem we are ready to solve original version.</p>
+<blockquote>
+<p>Last thing to note: there&rsquo;s actually two cases for every subarray: it includes index <em>k</em> or not.
+In case when it is not, we are ready to write the answer.
+Index <em>k</em> divides array on two parts, for both we can run Kadane&rsquo;s algorithm and get full list of sums.</p>
+</blockquote>
+<p>How to get possible sums, in case when subarray includes <em>k</em>?
+There&rsquo;s still O(n^2) of such subarrays.</p>
+<h2 id="idea-how-to-fix-index">Idea how to fix index</h2>
+<p>Every subarray consists of left part <em>a[i:k]</em>, <em>a[k]</em> and right part <em>a[k+1:j]</em>.
+Suppose we want to find maximal sum, then we can do the following.
+Compute prefix sums for <em>a</em> for O(n) and find <em>a[i:k]</em> with maximal sum and <em>a[k+1, j]</em> with maximal sum also for O(n).</p>
+<p>The answer is the sum of <em>sum(a[i:k]) + a[k] + sum(a[k+1, j])</em>.</p>
+<h2 id="instead-of-conclusion">Instead of conclusion</h2>
+        </div>
+    </article>
+</div>
+            <footer class="footer">    
+    <p>⚡️ Blog powered by <a href="https://gohugo.io/" target="_blank">Hugo</a>. Using <a href="https://github.com/sergiobarriel/tophat-theme" target="_blank">Top Hat</a> theme.</p>
+</footer>
+        </div>
+    </body>
+</html>

@@ -70,10 +70,10 @@ Is that possible? And how Kadane&rsquo;s algorithm is involved here? In this art
             <time class="time">09 Jan 2025</time>
         </li>
         <li class="reading-time" style="">
-            <span class="material-icons">timer</span>3 min read
+            <span class="material-icons">timer</span>4 min read
         </li>
         <li class="words-count" style="">
-            <span class="material-icons">article</span>570 words
+            <span class="material-icons">article</span>785 words
         </li>
     </ul>
     <ul class="article-tags" style="">
@@ -102,10 +102,10 @@ Is that possible? And how Kadane&rsquo;s algorithm is involved here? In this art
 <p>Given array <em>a</em> consisting of 1 and -1. Then index <em>k</em> and integer number <em>M</em> are chosen and in array we modify <em>a[k]=M</em>.
 It&rsquo;s required to find all distinct subarray sums in linear time.</p>
 </blockquote>
-<p>First question is logical: why it should be O(n) possible sums among n(n+1)/2 subarrays?</p>
 <h2 id="how-much-distinct-sum-can-we-get">How much distinct sum can we get</h2>
-<p>It may be hard to say why first, let&rsquo;s make one step back and simplify the question.</p>
-<p>Let&rsquo;s not modify anything, how much sums we can get in {-1, 1}-array without any other values in?</p>
+<p>Let&rsquo;s start from the first question: why it should be O(n) possible sums among n(n+1)/2 subarrays?</p>
+<p>It may be hard to say why first, let&rsquo;s make one step back and simplify the question.
+Let&rsquo;s not modify anything, how much sums we can get in {-1, 1}-array without any other values in?</p>
 <p>Such question seems already solvable. We know, that in {-1, 1}-array <em>x</em> there&rsquo;s minimal subarray sum greater or equal <em>#(number of -1)</em> and maximal is less or equal <em>#(number of 1)</em>. So, there couldn&rsquo;t be more then <em>x.length + 1</em> (including 0) distinct sums in <em>x</em>.</p>
 <h2 id="how-to-compute-all-possible-sums">How to compute all possible sums</h2>
 <p>Notice also that because there&rsquo;s only -1 or 1 in this array, subarray sums change very slightly (-1 or +1 exactly) if we move border index on one position.
@@ -113,9 +113,37 @@ Since there exists step by step transformation between subarrays with minimal su
 On this path we can&rsquo;t miss any intermediate number.
 Now, it is clear that list all of possible sums should include minimal and maximal sums and any value in between for any {-1, 1}-array.</p>
 <p>The problem is we can&rsquo;t compute minimal and maximal sums in O(n), <em>yet</em>.</p>
-<h2 id="kadane-algorithm">Kadane algorithm</h2>
-<p>To Do</p>
-<h2 id="decomposition">Decomposition</h2>
+<h2 id="kadanes-algorithm">Kadane&rsquo;s algorithm</h2>
+<p>&hellip;
+You can find this version anywhere (e.g. in wikipedia):</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#000">def</span> <span style="color:#000">max_subarray_kadane</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">numbers</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">best_sum</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">float</span><span style="color:#000;font-weight:bold">(</span><span style="color:#a40000">&#39;</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#000">inf</span><span style="color:#a40000">&#39;</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">current_sum</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#0000cf;font-weight:bold">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">for</span> <span style="color:#000">x</span> <span style="color:#000">in</span> <span style="color:#f57900">numbers</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">current_sum</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">max</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">x</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">current_sum</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#000">x</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">best_sum</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">max</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">best_sum</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">current_sum</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">best_sum</span>
+</span></span></code></pre></div><p>Variable <em>current_sum</em> contains best sum ending on current position. Obviously, the answer is maximum taken by all possible endings.
+Let&rsquo;s design the general version of the algorithm, both for minimum and maximum (also we want to return position of best subarray):</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#000">def</span> <span style="color:#000">opt_subarray_kadane</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">numbers</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">mode</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#a40000">&#39;</span><span style="color:#000">max</span><span style="color:#a40000">&#39;</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">current_sum</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">sgn</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000;font-weight:bold">{</span><span style="color:#a40000">&#39;</span><span style="color:#000">max</span><span style="color:#a40000">&#39;</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#a40000">&#39;</span><span style="color:#000">min</span><span style="color:#a40000">&#39;</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">l</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">r</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">best_l</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">best_r</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#0000cf;font-weight:bold">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000">best_sum</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">sgn</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">mode</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">*</span> <span style="color:#204a87;font-weight:bold">float</span><span style="color:#000;font-weight:bold">(</span><span style="color:#a40000">&#39;</span><span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#000">inf</span><span style="color:#a40000">&#39;</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">for</span> <span style="color:#000">i</span> <span style="color:#000">in</span> <span style="color:#000">range</span><span style="color:#000;font-weight:bold">(</span><span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">len</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">numbers</span><span style="color:#000;font-weight:bold">))</span><span style="color:#ce5c00;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000">x</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">r</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">numbers</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">i</span><span style="color:#000;font-weight:bold">],</span> <span style="color:#000">i</span>
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">if</span> <span style="color:#000">sgn</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">mode</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">*</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">x</span> <span style="color:#ce5c00;font-weight:bold">-</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">current_sum</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#000">x</span><span style="color:#000;font-weight:bold">))</span> <span style="color:#ce5c00;font-weight:bold">&gt;=</span> <span style="color:#0000cf;font-weight:bold">0</span><span style="color:#ce5c00;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000">current_sum</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">l</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">x</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">i</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">else</span><span style="color:#ce5c00;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000">current_sum</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">current_sum</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#000">x</span>
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>        <span style="color:#204a87;font-weight:bold">if</span> <span style="color:#000">sgn</span><span style="color:#000;font-weight:bold">[</span><span style="color:#000">mode</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">*</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">best_sum</span> <span style="color:#ce5c00;font-weight:bold">-</span> <span style="color:#000">current_sum</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">&lt;</span> <span style="color:#0000cf;font-weight:bold">0</span><span style="color:#ce5c00;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000">best_sum</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">current_sum</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000">best_l</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">best_r</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">l</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">r</span>
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>    <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#000">best_sum</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">best_l</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">best_r</span>
+</span></span></code></pre></div><h2 id="decomposition">Decomposition</h2>
 <p>Now, when we can solve simplified version of the problem we are ready to solve original version.</p>
 <blockquote>
 <p>Last thing to note: there&rsquo;s actually two cases for every subarray: it includes index <em>k</em> or not.</p>
@@ -124,18 +152,23 @@ Now, it is clear that list all of possible sums should include minimal and maxim
 Index <em>k</em> divides array on two parts, for each of them we can run Kadane&rsquo;s algorithm and get full list of sums as it was described in previous chapter.</p>
 <p>How to get possible sums, in case when subarray includes <em>k</em>?
 It seems that there&rsquo;s still O(n^2) of such subarrays, however it can be proved that there&rsquo;s O(n) distinct values among them.
-Remove <em>a[k]</em> from each subarray <em>a[i:j], i &lt;= k &lt; j</em>, now we have set of subarrays of {-1, 1}-array (a without k-th element).
+Indeed, let&rsquo;s remove element <em>a[k]</em> from each subarray <em>a[i:j], i &lt;= k &lt; j</em>. This way, now we have a set of subarrays of {-1, 1}-array (<em>a</em> without k-th element).
 There are O(n) distinct sums for this case as we proved before.</p>
 <p>Now we need to learn how to maximize subarrays with one index fixed inside.</p>
 <h2 id="idea-how-to-fix-index">Idea how to fix index</h2>
-<p>Every subarray consists of left part <em>a[i:k]</em>, <em>a[k]</em> and right part <em>a[k+1:j]</em>.
-Suppose we want to find maximal sum, then we can do the following.
-Compute prefix sums for <em>a</em> for O(n) and find <em>a[i:k]</em> with maximal sum and <em>a[k+1, j]</em> with maximal sum also for O(n).</p>
-<p>The answer is the sum of <em>sum(a[i:k]) + a[k] + sum(a[k+1, j])</em>.</p>
+<blockquote>
+<p>Every subarray of <em>a</em> which contains <em>a[k]</em> consists of three parts:
+left part <em>a[i:k]</em>, element <em>a[k]</em> itself and right part <em>a[k+1:j]</em>.</p>
+</blockquote>
+<p>Suppose we want to find maximal sum, then we can do the following.
+Compute prefix sums for <em>a</em> for O(n). Then let&rsquo;s find <em>a[i:k]</em> with maximal sum and <em>a[k+1, j]</em> with maximal sum also for O(n).</p>
+<p>The answer is the sum of <em>max(sum(a[i:k])) + a[k] + max(sum(a[k+1, j]))</em>, where maximums were taken by left border <em>i</em> and right border <em>j</em>.</p>
 <blockquote>
 <p>By the way, if we iterate over each index as fixed, we get yet another O(n^2)
 algorithm for maximal/minimal subarray, still one order better than bruteforce solution.</p>
 </blockquote>
+<p>And that&rsquo;s it, following the same logic for minimum we can find interval of possible for all subarrays.
+Don&rsquo;t forget to add intervals for left and right intervals, which can be computed with simple kadane&rsquo;s algorithm.</p>
 <h2 id="instead-of-conclusion">Instead of conclusion</h2>
 <p>You can find sketch solution <a href="https://github.com/mihael-tunik/train/blob/master/KadaneSubarray/sum_with_fixed_index.py">here</a>.</p>
         </div>
